@@ -11,7 +11,8 @@
         Title="ApiStudio - Modern API Testing" 
         Height="820" Width="1240"
         MinHeight="620" MinWidth="960"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="Resources/app_icon.png">
 
     <Window.Background>
         <!-- Atmospheric Mesh Gradient for Frosted Glass Depth -->
@@ -123,9 +124,12 @@
 
                     <!-- Brand Identity -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <!-- Glass Logo Pill -->
-                        <Border Background="{StaticResource PrimaryBlueBrush}" CornerRadius="8" Padding="7" Margin="0,0,10,0" Effect="{StaticResource ButtonGlowBlue}">
-                            <Path Data="{StaticResource IconSend}" Fill="#FFFFFF" Width="16" Height="16" Stretch="Uniform"/>
+                        <!-- Glass Logo Squircle with App Icon -->
+                        <Border CornerRadius="8" Margin="0,0,10,0" Width="30" Height="30" Effect="{StaticResource ButtonGlowBlue}" Background="{StaticResource PrimaryBlueBrush}">
+                            <Border.Clip>
+                                <RectangleGeometry RadiusX="8" RadiusY="8" Rect="0,0,30,30"/>
+                            </Border.Clip>
+                            <Image Source="Resources/app_icon.png" RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill"/>
                         </Border>
                         <TextBlock Text="ApiStudio" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}" VerticalAlignment="Center"/>
                         <Border Background="{StaticResource GlassSubtleBrush}" BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
