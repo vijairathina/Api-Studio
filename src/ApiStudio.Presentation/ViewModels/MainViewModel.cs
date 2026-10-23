@@ -45,16 +45,10 @@ public class MainViewModel : ObservableObject
         get => _selectedTab;
         set
         {
-            if (_selectedTab != null)
+            SetProperty(ref _selectedTab, value);
+            foreach (var tab in Tabs)
             {
-                _selectedTab.IsSelected = false;
-            }
-            if (SetProperty(ref _selectedTab, value))
-            {
-                if (_selectedTab != null)
-                {
-                    _selectedTab.IsSelected = true;
-                }
+                tab.IsSelected = (tab != null && tab == _selectedTab);
             }
         }
     }
@@ -664,7 +658,7 @@ public class MainViewModel : ObservableObject
             appResources["LightBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#060B14"));
 
             appResources["PrimaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8FAFC"));
-            appResources["SecondaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8"));
+            appResources["SecondaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CBD5E1"));
             appResources["PrimaryBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00D2FF"));
             appResources["SecondaryBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0066FF"));
             appResources["AccentBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#38BDF8"));

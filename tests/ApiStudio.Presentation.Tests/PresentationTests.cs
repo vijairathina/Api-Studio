@@ -189,6 +189,12 @@ public class PresentationTests
         Assert.Equal(tab1, vm.SelectedTab);
         Assert.True(tab1.IsSelected);
         Assert.False(tab2.IsSelected);
+
+        // Crucial: re-clicking or selecting the currently active tab MUST maintain IsSelected == true
+        vm.SelectTabCommand.Execute(tab1);
+        Assert.Equal(tab1, vm.SelectedTab);
+        Assert.True(tab1.IsSelected);
+        Assert.False(tab2.IsSelected);
     }
 
     [Fact]

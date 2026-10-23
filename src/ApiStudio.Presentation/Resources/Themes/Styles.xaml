@@ -263,9 +263,9 @@
 
     <!-- Glass TabControl Styles -->
     <Style x:Key="ModernTabItem" TargetType="TabItem">
-        <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="FontWeight" Value="Medium" />
+        <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="Padding" Value="16,9" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Template">
@@ -280,13 +280,13 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource AccentBlueBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource AccentBlueBrush}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}" />
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryBlueBrush}" />
                             <Setter Property="FontWeight" Value="Bold" />
-                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource PrimaryBlueBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

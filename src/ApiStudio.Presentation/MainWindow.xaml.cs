@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using ApiStudio.Domain.Entities;
 using ApiStudio.Presentation.ViewModels;
 using ApiStudio.Presentation.Views.Controls;
@@ -42,11 +43,27 @@ public partial class MainWindow : Window
 
     private void OnTabItemClick(object sender, MouseButtonEventArgs e)
     {
+        if (e.OriginalSource is DependencyObject dep && FindVisualParent<Button>(dep) != null)
+        {
+            return;
+        }
+
         if (sender is FrameworkElement fe && fe.DataContext is RequestTabViewModel tab)
         {
             _viewModel.SelectTab(tab);
             fe.BringIntoView();
+            e.Handled = true;
         }
+    }
+
+    private static T? FindVisualParent<T>(DependencyObject? child) where T : DependencyObject
+    {
+        while (child != null)
+        {
+            if (child is T parent) return parent;
+            child = VisualTreeHelper.GetParent(child);
+        }
+        return null;
     }
 
     private void OnTabsScrollViewerPreviewMouseWheel(object sender, MouseWheelEventArgs e)
