@@ -408,32 +408,21 @@
                                             <Border Margin="0,0,6,0" Height="32" Cursor="Hand" MouseLeftButtonUp="OnTabItemClick" VerticalAlignment="Center">
                                                 <Border.Style>
                                                     <Style TargetType="Border">
-                                                        <Setter Property="Background" Value="#172338"/>
-                                                        <Setter Property="BorderBrush" Value="#2C3E5B"/>
+                                                        <Setter Property="Background" Value="{DynamicResource TabInactiveBackgroundBrush}"/>
+                                                        <Setter Property="BorderBrush" Value="{DynamicResource TabInactiveBorderBrush}"/>
                                                         <Setter Property="BorderThickness" Value="1"/>
                                                         <Setter Property="CornerRadius" Value="8"/>
                                                         <Setter Property="Padding" Value="11,0,8,0"/>
                                                         <Style.Triggers>
                                                             <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter Property="Background" Value="#22334F"/>
-                                                                <Setter Property="BorderBrush" Value="#4D38BDF8"/>
+                                                                <Setter Property="Background" Value="{DynamicResource TabHoverBackgroundBrush}"/>
+                                                                <Setter Property="BorderBrush" Value="{DynamicResource TabHoverBorderBrush}"/>
                                                             </Trigger>
                                                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                <Setter Property="Background">
-                                                                    <Setter.Value>
-                                                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                                            <GradientStop Color="#294877" Offset="0.0"/>
-                                                                            <GradientStop Color="#142646" Offset="1.0"/>
-                                                                        </LinearGradientBrush>
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                                <Setter Property="BorderBrush" Value="#00D2FF"/>
+                                                                <Setter Property="Background" Value="{DynamicResource TabActiveBackgroundBrush}"/>
+                                                                <Setter Property="BorderBrush" Value="{DynamicResource TabActiveBorderBrush}"/>
                                                                 <Setter Property="BorderThickness" Value="1.5"/>
-                                                                <Setter Property="Effect">
-                                                                    <Setter.Value>
-                                                                        <DropShadowEffect BlurRadius="16" Color="#00D2FF" Opacity="0.6" ShadowDepth="0"/>
-                                                                    </Setter.Value>
-                                                                </Setter>
+                                                                <Setter Property="Effect" Value="{DynamicResource TabActiveEffect}"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -451,7 +440,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <!-- Tab Name Text (High-contrast, crystal-clear visibility) -->
+                                                    <!-- Tab Name Text (Theme-Aware, High-Contrast Visibility) -->
                                                     <TextBlock Grid.Column="0" Text="{Binding Name}" 
                                                                FontSize="12" FontWeight="SemiBold" 
                                                                VerticalAlignment="Center" 
@@ -459,13 +448,13 @@
                                                                TextTrimming="CharacterEllipsis" MaxWidth="160">
                                                         <TextBlock.Style>
                                                             <Style TargetType="TextBlock">
-                                                                <Setter Property="Foreground" Value="#CBD5E1"/>
+                                                                <Setter Property="Foreground" Value="{DynamicResource TabInactiveForegroundBrush}"/>
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Border}}" Value="True">
-                                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource TabHoverForegroundBrush}"/>
                                                                     </DataTrigger>
                                                                     <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource TabActiveForegroundBrush}"/>
                                                                         <Setter Property="FontWeight" Value="Bold"/>
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
@@ -503,16 +492,13 @@
                                                             <ControlTemplate TargetType="Button">
                                                                 <Border x:Name="b" Background="Transparent" CornerRadius="4">
                                                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                                                                      TextElement.Foreground="#94A3B8"/>
+                                                                                      TextElement.Foreground="{DynamicResource TabCloseForegroundBrush}"/>
                                                                 </Border>
                                                                 <ControlTemplate.Triggers>
                                                                     <Trigger Property="IsMouseOver" Value="True">
                                                                         <Setter TargetName="b" Property="Background" Value="#EF4444"/>
                                                                         <Setter Property="Foreground" Value="#FFFFFF"/>
                                                                     </Trigger>
-                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                        <Setter Property="Foreground" Value="#CBD5E1"/>
-                                                                    </DataTrigger>
                                                                 </ControlTemplate.Triggers>
                                                             </ControlTemplate>
                                                         </Button.Template>
@@ -520,10 +506,7 @@
 
                                                     <!-- Active Tab Glowing Accent Indicator (Bottom Bar) -->
                                                     <Border Grid.ColumnSpan="4" VerticalAlignment="Bottom" Height="2.5" CornerRadius="1.5"
-                                                            Background="#00D2FF" Margin="4,0,4,-1">
-                                                        <Border.Effect>
-                                                            <DropShadowEffect BlurRadius="6" Color="#00D2FF" Opacity="0.9" ShadowDepth="0"/>
-                                                        </Border.Effect>
+                                                            Background="{DynamicResource TabActiveIndicatorBrush}" Margin="4,0,4,-1">
                                                         <Border.Style>
                                                             <Style TargetType="Border">
                                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -541,21 +524,21 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
 
-                                <!-- New Tab (+) Button directly next to last tab (preview.png match) -->
+                                <!-- New Tab (+) Button directly next to last tab (Theme-Aware) -->
                                 <Button Width="30" Height="30" Margin="2,0,8,0" VerticalAlignment="Center" Cursor="Hand"
                                         Command="{Binding NewTabCommand}" ToolTip="New Request (Ctrl+T)">
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <Border x:Name="btnBorder" Width="28" Height="28" CornerRadius="6" 
-                                                    Background="#260F1A2D" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1">
+                                                    Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1">
                                                 <TextBlock Text="+" FontSize="16" FontWeight="SemiBold" 
                                                            Foreground="{DynamicResource SecondaryTextBrush}" 
                                                            HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-1,0,0"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="btnBorder" Property="Background" Value="#4D152542"/>
-                                                    <Setter TargetName="btnBorder" Property="BorderBrush" Value="#00D2FF"/>
+                                                    <Setter TargetName="btnBorder" Property="Background" Value="{DynamicResource HoverBackgroundBrush}"/>
+                                                    <Setter TargetName="btnBorder" Property="BorderBrush" Value="{DynamicResource PrimaryBlueBrush}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>

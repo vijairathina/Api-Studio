@@ -700,6 +700,36 @@ public class MainViewModel : ObservableObject
                 Color = (Color)ColorConverter.ConvertFromString("#0066FF"),
                 Opacity = 0.85
             };
+
+            // Theme-aware Document Tab Brushes (Dark Theme)
+            appResources["TabActiveBackgroundBrush"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#294877"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#142646"), 1.0)
+                },
+                new Point(0, 0), new Point(0, 1));
+            appResources["TabActiveBorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00D2FF"));
+            appResources["TabActiveForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
+            appResources["TabActiveIndicatorBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00D2FF"));
+            appResources["TabActiveEffect"] = new DropShadowEffect
+            {
+                BlurRadius = 16,
+                Direction = 0,
+                ShadowDepth = 0,
+                Color = (Color)ColorConverter.ConvertFromString("#00D2FF"),
+                Opacity = 0.60
+            };
+
+            appResources["TabInactiveBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#172338"));
+            appResources["TabInactiveBorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2C3E5B"));
+            appResources["TabInactiveForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#CBD5E1"));
+
+            appResources["TabHoverBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#22334F"));
+            appResources["TabHoverBorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4D38BDF8"));
+            appResources["TabHoverForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
+
+            appResources["TabCloseForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8"));
         }
         else
         {
@@ -805,6 +835,30 @@ public class MainViewModel : ObservableObject
                 Color = (Color)ColorConverter.ConvertFromString("#0052CC"),
                 Opacity = 0.45
             };
+
+            // Theme-aware Document Tab Brushes (Light Theme)
+            appResources["TabActiveBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
+            appResources["TabActiveBorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005EB8"));
+            appResources["TabActiveForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00338D"));
+            appResources["TabActiveIndicatorBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005EB8"));
+            appResources["TabActiveEffect"] = new DropShadowEffect
+            {
+                BlurRadius = 12,
+                Direction = 270,
+                ShadowDepth = 2,
+                Color = (Color)ColorConverter.ConvertFromString("#00338D"),
+                Opacity = 0.16
+            };
+
+            appResources["TabInactiveBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DCE7F5"));
+            appResources["TabInactiveBorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#C2D4EB"));
+            appResources["TabInactiveForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2E4057"));
+
+            appResources["TabHoverBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F4F8FD"));
+            appResources["TabHoverBorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00A3E0"));
+            appResources["TabHoverForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0F1D38"));
+
+            appResources["TabCloseForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#5A6A85"));
         }
     }
 

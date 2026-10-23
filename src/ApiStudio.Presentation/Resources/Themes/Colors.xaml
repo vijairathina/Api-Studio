@@ -130,4 +130,20 @@
     <DropShadowEffect x:Key="GlassGlowBlue" BlurRadius="16" Direction="0" ShadowDepth="0" Color="#00A3E0" Opacity="0.35"/>
     <DropShadowEffect x:Key="ButtonGlowBlue" BlurRadius="16" Direction="270" ShadowDepth="3" Color="#0052CC" Opacity="0.45"/>
 
+    <!-- Theme-aware Document Tab Brushes (Light Theme Defaults) -->
+    <SolidColorBrush x:Key="TabActiveBackgroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="TabActiveBorderBrush" Color="#005EB8" />
+    <SolidColorBrush x:Key="TabActiveForegroundBrush" Color="#00338D" />
+    <SolidColorBrush x:Key="TabActiveIndicatorBrush" Color="#005EB8" />
+    <DropShadowEffect x:Key="TabActiveEffect" BlurRadius="12" Direction="270" ShadowDepth="2" Color="#00338D" Opacity="0.16"/>
+
+    <SolidColorBrush x:Key="TabInactiveBackgroundBrush" Color="#DCE7F5" />
+    <SolidColorBrush x:Key="TabInactiveBorderBrush" Color="#C2D4EB" />
+    <SolidColorBrush x:Key="TabInactiveForegroundBrush" Color="#2E4057" />
+
+    <SolidColorBrush x:Key="TabHoverBackgroundBrush" Color="#F4F8FD" />
+    <SolidColorBrush x:Key="TabHoverBorderBrush" Color="#00A3E0" />
+    <SolidColorBrush x:Key="TabHoverForegroundBrush" Color="#0F1D38" />
+
+    <SolidColorBrush x:Key="TabCloseForegroundBrush" Color="#5A6A85" />
 </ResourceDictionary>
