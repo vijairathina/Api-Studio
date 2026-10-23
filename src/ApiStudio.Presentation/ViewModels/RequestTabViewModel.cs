@@ -75,6 +75,15 @@ public class RequestTabViewModel : ObservableObject
             {
                 OnPropertyChanged(nameof(MethodString));
                 IsDirty = true;
+                if ((value == HttpMethodType.POST || value == HttpMethodType.PUT || value == HttpMethodType.PATCH)
+                    && SelectedBodyType == BodyType.None)
+                {
+                    SelectedBodyType = BodyType.Json;
+                    if (string.IsNullOrWhiteSpace(RawBodyContent))
+                    {
+                        RawBodyContent = "{\n  \n}";
+                    }
+                }
             }
         }
     }
@@ -283,6 +292,11 @@ public class RequestTabViewModel : ObservableObject
     public ICommand AddUrlEncodedParamCommand { get; }
     public ICommand AddFormDataParamCommand { get; }
     public ICommand AddAssertionCommand { get; }
+
+    public ICommand SetBodyTypeCommand { get; }
+    public ICommand InsertEmptyJsonObjectCommand { get; }
+    public ICommand InsertEmptyJsonArrayCommand { get; }
+    public ICommand ClearBodyCommand { get; }
     public event Action<RequestTabViewModel>? SaveRequested;
     public event Action<RequestHistoryItem>? HistoryItemAdded;
 
@@ -311,6 +325,29 @@ public class RequestTabViewModel : ObservableObject
         AddUrlEncodedParamCommand = new RelayCommand(AddUrlEncodedParam);
         AddFormDataParamCommand = new RelayCommand(AddFormDataParam);
         AddAssertionCommand = new RelayCommand(AddAssertion);
+
+        SetBodyTypeCommand = new RelayCommand<string>(param =>
+        {
+            if (Enum.TryParse<BodyType>(param, true, out var bt))
+            {
+                SelectedBodyType = bt;
+                if (bt == BodyType.Json && string.IsNullOrWhiteSpace(RawBodyContent))
+                {
+                    RawBodyContent = "{\n  \n}";
+                }
+                else if (bt == BodyType.MultipartFormData && FormDataParams.Count == 0)
+                {
+                    AddFormDataParam();
+                }
+                else if (bt == BodyType.FormUrlEncoded && UrlEncodedParams.Count == 0)
+                {
+                    AddUrlEncodedParam();
+                }
+            }
+        });
+        InsertEmptyJsonObjectCommand = new RelayCommand(() => RawBodyContent = "{\n  \n}");
+        InsertEmptyJsonArrayCommand = new RelayCommand(() => RawBodyContent = "[\n  \n]");
+        ClearBodyCommand = new RelayCommand(() => RawBodyContent = string.Empty);
 
         // Pre-populate with typical Accept header
         AddHeaderItem("Accept", "*/*");

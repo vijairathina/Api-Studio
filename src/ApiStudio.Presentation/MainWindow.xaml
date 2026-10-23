@@ -160,10 +160,7 @@
                 <!-- Right Quick Actions & Window Caption Buttons -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Content="cURL Import" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,0" Margin="0,0,6,0" Command="{Binding ImportCurlCommand}" WindowChrome.IsHitTestVisibleInChrome="True"/>
-                    <Button Content="Run Tests" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,0" Margin="0,0,8,0" Command="{Binding OpenRunnerCommand}" WindowChrome.IsHitTestVisibleInChrome="True"/>
-                    <Button Style="{StaticResource IconButton}" Height="28" Width="28" Margin="0,0,10,0" ToolTip="Settings &amp; Theme" Command="{Binding OpenSettingsCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
-                        <Path Data="{StaticResource IconSettings}" Fill="{DynamicResource SecondaryTextBrush}" Width="14" Height="14" Stretch="Uniform"/>
-                    </Button>
+                    <Button Content="Run Tests" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,0" Margin="0,0,10,0" Command="{Binding OpenRunnerCommand}" WindowChrome.IsHitTestVisibleInChrome="True"/>
 
                     <Button Style="{StaticResource WindowCaptionButton}" Click="Minimize_Click" ToolTip="Minimize">
                         <Path Data="M 0,5 L 10,5" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2" Width="10" Height="10"/>
@@ -387,80 +384,164 @@
                     </Grid.RowDefinitions>
 
                     <!-- Document Tabs Bar matching preview.png -->
-                    <Grid Grid.Row="0" Margin="0,0,0,8">
+                    <Grid Grid.Row="0" Margin="0,0,0,8" Height="36">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>    <!-- Tabs Scroll Area -->
+                            <ColumnDefinition Width="Auto"/> <!-- Scroll Left/Right arrows + Split View tools -->
                         </Grid.ColumnDefinitions>
 
-                        <!-- Tabs List -->
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-                            <ItemsControl ItemsSource="{Binding Tabs}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Margin="0,0,6,0" Cursor="Hand" MouseLeftButtonUp="OnTabItemClick">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
-                                                    <Setter Property="Background" Value="#330F1A2D"/>
-                                                    <Setter Property="BorderBrush" Value="{DynamicResource GlassBorderGradient}"/>
-                                                    <Setter Property="BorderThickness" Value="1"/>
-                                                    <Setter Property="CornerRadius" Value="8"/>
-                                                    <Setter Property="Padding" Value="12,6"/>
-                                                    <Setter Property="Opacity" Value="0.82"/>
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Opacity" Value="1.0"/>
-                                                            <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}"/>
-                                                        </Trigger>
-                                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                            <Setter Property="Background" Value="#D9162444"/>
-                                                            <Setter Property="BorderBrush" Value="#00D2FF"/>
-                                                            <Setter Property="BorderThickness" Value="1.5"/>
-                                                            <Setter Property="Opacity" Value="1.0"/>
-                                                            <Setter Property="Effect">
-                                                                <Setter.Value>
-                                                                    <DropShadowEffect BlurRadius="14" Color="#00D2FF" Opacity="0.32" ShadowDepth="0"/>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <Border.InputBindings>
-                                                <MouseBinding Gesture="LeftClick" 
-                                                              Command="{Binding DataContext.SelectTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
-                                                              CommandParameter="{Binding}"/>
-                                            </Border.InputBindings>
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" FontWeight="SemiBold" Margin="0,0,8,0"/>
-                                                <Border Background="{Binding MethodString, Converter={StaticResource MethodBrushConv}}" 
-                                                        CornerRadius="4" Padding="5,1" Margin="0,0,6,0">
-                                                    <TextBlock Text="{Binding MethodString}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10"/>
-                                                </Border>
-                                                <TextBlock Text="*" Foreground="{StaticResource ErrorBrush}" FontWeight="Bold" 
-                                                           Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" Margin="0,0,6,0"/>
-                                                <Button Content="✕" Style="{StaticResource IconButton}" Padding="2" FontSize="10" 
-                                                        Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
-                                                        CommandParameter="{Binding}"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                        <!-- Tabs Scroll Area -->
+                        <ScrollViewer x:Name="TabsScrollViewer" 
+                                      HorizontalScrollBarVisibility="Hidden" 
+                                      VerticalScrollBarVisibility="Disabled"
+                                      PreviewMouseWheel="OnTabsScrollViewerPreviewMouseWheel">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <!-- Tabs ItemsControl -->
+                                <ItemsControl ItemsSource="{Binding Tabs}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="0,0,6,0" Height="32" Cursor="Hand" MouseLeftButtonUp="OnTabItemClick" VerticalAlignment="Center">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#2B0E182A"/>
+                                                        <Setter Property="BorderBrush" Value="#2645689E"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                        <Setter Property="CornerRadius" Value="8"/>
+                                                        <Setter Property="Padding" Value="10,0,6,0"/>
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#401B2E4A"/>
+                                                                <Setter Property="BorderBrush" Value="#4D00D2FF"/>
+                                                            </Trigger>
+                                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                <Setter Property="Background" Value="#E6152542"/>
+                                                                <Setter Property="BorderBrush" Value="#00D2FF"/>
+                                                                <Setter Property="BorderThickness" Value="1.5"/>
+                                                                <Setter Property="Effect">
+                                                                    <Setter.Value>
+                                                                        <DropShadowEffect BlurRadius="12" Color="#00D2FF" Opacity="0.4" ShadowDepth="0"/>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <Border.InputBindings>
+                                                    <MouseBinding Gesture="LeftClick" 
+                                                                  Command="{Binding DataContext.SelectTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                                  CommandParameter="{Binding}"/>
+                                                </Border.InputBindings>
+                                                <Grid VerticalAlignment="Center">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <!-- Tab Name Text -->
+                                                    <TextBlock Grid.Column="0" Text="{Binding Name}" 
+                                                               FontSize="12" FontWeight="SemiBold" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,0,8,0"
+                                                               TextTrimming="CharacterEllipsis" MaxWidth="160">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Foreground" Value="#94A3B8"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                                        <Setter Property="FontWeight" Value="Bold"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+
+                                                    <!-- Method Badge -->
+                                                    <Border Grid.Column="1" 
+                                                            Background="{Binding MethodString, Converter={StaticResource MethodBrushConv}}" 
+                                                            CornerRadius="4" Padding="6,2" Margin="0,0,6,0" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding MethodString}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"/>
+                                                    </Border>
+
+                                                    <!-- Dirty indicator * -->
+                                                    <TextBlock Grid.Column="2" Text="*" Foreground="{StaticResource ErrorBrush}" FontWeight="Bold" FontSize="12"
+                                                               Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" Margin="0,0,4,0" VerticalAlignment="Center"/>
+
+                                                    <!-- Close Button ✕ -->
+                                                    <Button Grid.Column="3" Content="✕" Width="18" Height="18" Padding="0" FontSize="10" 
+                                                            VerticalAlignment="Center" Cursor="Hand"
+                                                            Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                            CommandParameter="{Binding}" ToolTip="Close tab">
+                                                        <Button.Template>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border x:Name="b" Background="Transparent" CornerRadius="4">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                                                                      TextElement.Foreground="#64748B"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="b" Property="Background" Value="#33FFFFFF"/>
+                                                                        <Setter Property="Foreground" Value="#FFFFFF"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Button.Template>
+                                                    </Button>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <!-- New Tab (+) Button directly next to last tab (preview.png match) -->
+                                <Button Width="30" Height="30" Margin="2,0,8,0" VerticalAlignment="Center" Cursor="Hand"
+                                        Command="{Binding NewTabCommand}" ToolTip="New Request (Ctrl+T)">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="btnBorder" Width="28" Height="28" CornerRadius="6" 
+                                                    Background="#260F1A2D" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1">
+                                                <TextBlock Text="+" FontSize="16" FontWeight="SemiBold" 
+                                                           Foreground="{DynamicResource SecondaryTextBrush}" 
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-1,0,0"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="btnBorder" Property="Background" Value="#4D152542"/>
+                                                    <Setter TargetName="btnBorder" Property="BorderBrush" Value="#00D2FF"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
                         </ScrollViewer>
 
-                        <!-- Add Tab (+) & Split View icons -->
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <Button Content="+" Style="{StaticResource SecondaryButton}" 
-                                    Width="32" Height="30" FontSize="15" FontWeight="Bold" Padding="0" Margin="0,0,6,0"
-                                    Command="{Binding NewTabCommand}" ToolTip="New Request (Ctrl+T)"/>
-                            <Button Style="{StaticResource IconButton}" Width="30" Height="30" ToolTip="Split View">
-                                <Path Data="{StaticResource IconSplit}" Fill="{DynamicResource SecondaryTextBrush}" Width="14" Height="14" Stretch="Uniform"/>
+                        <!-- Right Side Tools: Tab Scroll Arrows, Split View, More (preview.png match) -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="4,0,0,0">
+                            <!-- Scroll Left Button -->
+                            <Button Width="24" Height="28" Margin="0,0,2,0" Style="{StaticResource IconButton}" 
+                                    Click="ScrollTabsLeft_Click" ToolTip="Scroll Tabs Left">
+                                <Path Data="M 6,0 L 0,5 L 6,10" Stroke="{DynamicResource SecondaryTextBrush}" StrokeThickness="1.5" Width="7" Height="10" Stretch="Uniform"/>
+                            </Button>
+                            <!-- Scroll Right Button -->
+                            <Button Width="24" Height="28" Margin="0,0,6,0" Style="{StaticResource IconButton}" 
+                                    Click="ScrollTabsRight_Click" ToolTip="Scroll Tabs Right">
+                                <Path Data="M 0,0 L 6,5 L 0,10" Stroke="{DynamicResource SecondaryTextBrush}" StrokeThickness="1.5" Width="7" Height="10" Stretch="Uniform"/>
+                            </Button>
+                            <!-- Split View Button -->
+                            <Button Style="{StaticResource IconButton}" Width="28" Height="28" Margin="0,0,2,0" ToolTip="Split View">
+                                <Path Data="{StaticResource IconSplit}" Fill="{DynamicResource SecondaryTextBrush}" Width="13" Height="13" Stretch="Uniform"/>
+                            </Button>
+                            <!-- More Options Button -->
+                            <Button Style="{StaticResource IconButton}" Width="28" Height="28" ToolTip="More Options">
+                                <Path Data="{StaticResource IconMore}" Fill="{DynamicResource SecondaryTextBrush}" Width="13" Height="13" Stretch="Uniform"/>
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -657,30 +738,116 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                            <TextBlock Text="Body Type:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource SecondaryTextBrush}"/>
-                                            <ComboBox ItemsSource="{Binding Source={StaticResource BodyTypes}}" 
-                                                      SelectedItem="{Binding SelectedBodyType}" Width="180"/>
-                                            <Button Content="Format JSON" Style="{StaticResource SecondaryButton}" 
-                                                    Command="{Binding FormatJsonCommand}" Margin="12,0,0,0"
-                                                    Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Raw}"/>
-                                        </StackPanel>
 
-                                        <!-- Raw Body Editor -->
-                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Raw}">
-                                            <TextBox Style="{StaticResource CodeTextBox}" 
-                                                     Text="{Binding RawBodyContent, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <!-- Body Format Selector Bar -->
+                                        <Border Grid.Row="0" Background="{DynamicResource GlassSubtleBrush}" 
+                                                BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
+                                                CornerRadius="8" Padding="10,6" Margin="0,0,0,10">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Quick Body Format Pill Buttons -->
+                                                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <TextBlock Text="Format:" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="12"/>
+                                                    <Button Content="none" Style="{StaticResource SecondaryButton}" Height="26" Padding="10,0" Margin="0,0,4,0" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="None"/>
+                                                    <Button Content="JSON" Style="{StaticResource SecondaryButton}" Height="26" Padding="10,0" Margin="0,0,4,0" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="Json"/>
+                                                    <Button Content="XML" Style="{StaticResource SecondaryButton}" Height="26" Padding="10,0" Margin="0,0,4,0" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="Xml"/>
+                                                    <Button Content="Text" Style="{StaticResource SecondaryButton}" Height="26" Padding="10,0" Margin="0,0,4,0" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="Text"/>
+                                                    <Button Content="form-data" Style="{StaticResource SecondaryButton}" Height="26" Padding="10,0" Margin="0,0,4,0" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="MultipartFormData"/>
+                                                    <Button Content="x-www-form-urlencoded" Style="{StaticResource SecondaryButton}" Height="26" Padding="10,0" Margin="0,0,4,0" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="FormUrlEncoded"/>
+                                                    <Button Content="binary" Style="{StaticResource SecondaryButton}" Height="26" Padding="10,0" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="BinaryFile"/>
+                                                </StackPanel>
+
+                                                <!-- Current Selected Dropdown -->
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <ComboBox ItemsSource="{Binding Source={StaticResource BodyTypes}}" 
+                                                              SelectedItem="{Binding SelectedBodyType}" Width="150" Height="26" VerticalContentAlignment="Center"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- 1. EMPTY STATE (When None is selected) -->
+                                        <Border Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=None}"
+                                                Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" 
+                                                BorderThickness="1" CornerRadius="8" Padding="24" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <StackPanel HorizontalAlignment="Center" MaxWidth="480">
+                                                <TextBlock Text="This request does not have a body" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                                                <TextBlock Text="To send data with your request, choose a body type above or click one of the quick options below:" 
+                                                           Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,16"/>
+                                                <WrapPanel HorizontalAlignment="Center">
+                                                    <Button Content="+ Create JSON Body" Style="{StaticResource PrimaryButton}" Height="32" Padding="16,0" Margin="4" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="Json"/>
+                                                    <Button Content="+ Add Form Data" Style="{StaticResource SecondaryButton}" Height="32" Padding="14,0" Margin="4" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="MultipartFormData"/>
+                                                    <Button Content="+ Add URL-Encoded" Style="{StaticResource SecondaryButton}" Height="32" Padding="14,0" Margin="4" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="FormUrlEncoded"/>
+                                                    <Button Content="+ Attach Binary File" Style="{StaticResource SecondaryButton}" Height="32" Padding="14,0" Margin="4" 
+                                                            Command="{Binding SetBodyTypeCommand}" CommandParameter="BinaryFile"/>
+                                                </WrapPanel>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- 2. RAW TEXT / JSON / XML EDITOR -->
+                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Json|Xml|Text}">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Editor Sub-Toolbar -->
+                                            <Grid Grid.Row="0" Margin="0,0,0,8">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border Background="#1A00D2FF" BorderBrush="#00D2FF" BorderThickness="1" CornerRadius="4" Padding="6,2" Margin="0,0,10,0">
+                                                        <TextBlock Text="{Binding SelectedBodyType, StringFormat='{}Content-Type: {0}'}" FontSize="11" FontWeight="Bold" Foreground="#00D2FF"/>
+                                                    </Border>
+                                                    <Button Content="Format JSON" Style="{StaticResource SecondaryButton}" Height="26" Padding="10,0" Margin="0,0,6,0" 
+                                                            Command="{Binding FormatJsonCommand}" ToolTip="Beautify JSON indentation"/>
+                                                    <Button Content="Preset: {}" Style="{StaticResource SecondaryButton}" Height="26" Padding="8,0" Margin="0,0,6,0" 
+                                                            Command="{Binding InsertEmptyJsonObjectCommand}" ToolTip="Insert empty JSON object"/>
+                                                    <Button Content="Preset: []" Style="{StaticResource SecondaryButton}" Height="26" Padding="8,0" Margin="0,0,6,0" 
+                                                            Command="{Binding InsertEmptyJsonArrayCommand}" ToolTip="Insert empty JSON array"/>
+                                                    <Button Content="Clear" Style="{StaticResource SecondaryButton}" Height="26" Padding="8,0" 
+                                                            Command="{Binding ClearBodyCommand}" ToolTip="Clear body content"/>
+                                                </StackPanel>
+                                            </Grid>
+
+                                            <!-- Code Editor TextBox -->
+                                            <TextBox Grid.Row="1" Style="{StaticResource CodeTextBox}" 
+                                                     Text="{Binding RawBodyContent, UpdateSourceTrigger=PropertyChanged}"
+                                                     AcceptsReturn="True" AcceptsTab="True"
+                                                     VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                                                     MinHeight="180" VerticalAlignment="Stretch"/>
                                         </Grid>
 
-                                        <!-- Form Data / URL Encoded Tables -->
-                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=FormData}">
-                                            <DataGrid ItemsSource="{Binding FormDataParams}" AutoGenerateColumns="False" 
+                                        <!-- 3. MULTIPART FORM DATA TABLE -->
+                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=MultipartFormData}">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                                                <Button Content="+ Add Form Field" Style="{StaticResource SecondaryButton}" 
+                                                        Command="{Binding AddFormDataParamCommand}" Height="26" Padding="10,0"/>
+                                            </StackPanel>
+                                            <DataGrid Grid.Row="1" ItemsSource="{Binding FormDataParams}" AutoGenerateColumns="False" 
                                                       CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
                                                       BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
                                                 <DataGrid.Columns>
                                                     <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
-                                                    <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
+                                                    <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
                                                     <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                                                    <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
                                                     <DataGridTemplateColumn Width="50">
                                                         <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
@@ -692,13 +859,45 @@
                                             </DataGrid>
                                         </Grid>
 
-                                        <!-- Binary File Picker -->
-                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Binary}">
-                                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                                <Button Content="Select File..." Style="{StaticResource SecondaryButton}" Command="{Binding SelectBinaryFileCommand}" Width="150" Height="36"/>
-                                                <TextBlock Text="{Binding BinaryFilePath, TargetNullValue='No file selected'}" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,10,0,0"/>
+                                        <!-- 4. URL ENCODED TABLE -->
+                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=FormUrlEncoded}">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                                                <Button Content="+ Add Parameter" Style="{StaticResource SecondaryButton}" 
+                                                        Command="{Binding AddUrlEncodedParamCommand}" Height="26" Padding="10,0"/>
                                             </StackPanel>
+                                            <DataGrid Grid.Row="1" ItemsSource="{Binding UrlEncodedParams}" AutoGenerateColumns="False" 
+                                                      CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
+                                                      BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
+                                                <DataGrid.Columns>
+                                                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
+                                                    <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                                    <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                                                    <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
+                                                    <DataGridTemplateColumn Width="50">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <Button Content="✕" Style="{StaticResource IconButton}" Command="{Binding DeleteCommand}"/>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
                                         </Grid>
+
+                                        <!-- 5. BINARY FILE PICKER -->
+                                        <Border Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=BinaryFile}"
+                                                Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" 
+                                                BorderThickness="1" CornerRadius="8" Padding="24" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <StackPanel HorizontalAlignment="Center" MaxWidth="480">
+                                                <TextBlock Text="Select a Binary File to Send" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                                                <Button Content="Choose File to Upload..." Style="{StaticResource PrimaryButton}" Command="{Binding SelectFileCommand}" Height="34" Padding="18,0" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="{Binding BinaryFilePath, TargetNullValue='No file selected'}" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,12,0,0" TextAlignment="Center" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </Border>
                                     </Grid>
                                 </TabItem>
 

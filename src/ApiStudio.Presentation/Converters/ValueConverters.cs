@@ -70,10 +70,32 @@ public class IntToBooleanConverter : IValueConverter
 
 public class StringEqualsConverter : IValueConverter
 {
+    public bool Invert { get; set; }
+
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value == null || parameter == null) return false;
-        return string.Equals(value.ToString(), parameter.ToString(), StringComparison.OrdinalIgnoreCase);
+        if (value == null || parameter == null)
+        {
+            if (targetType == typeof(Visibility))
+            {
+                return Invert ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return Invert;
+        }
+
+        var strVal = value.ToString() ?? "";
+        var paramStr = parameter.ToString() ?? "";
+        var options = paramStr.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        bool isMatch = options.Any(opt => string.Equals(strVal, opt, StringComparison.OrdinalIgnoreCase));
+        if (Invert) isMatch = !isMatch;
+
+        if (targetType == typeof(Visibility))
+        {
+            return isMatch ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        return isMatch;
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

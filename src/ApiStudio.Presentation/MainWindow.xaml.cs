@@ -45,7 +45,27 @@ public partial class MainWindow : Window
         if (sender is FrameworkElement fe && fe.DataContext is RequestTabViewModel tab)
         {
             _viewModel.SelectTab(tab);
+            fe.BringIntoView();
         }
+    }
+
+    private void OnTabsScrollViewerPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (sender is ScrollViewer scv)
+        {
+            scv.ScrollToHorizontalOffset(scv.HorizontalOffset - (e.Delta * 0.75));
+            e.Handled = true;
+        }
+    }
+
+    private void ScrollTabsLeft_Click(object sender, RoutedEventArgs e)
+    {
+        TabsScrollViewer.ScrollToHorizontalOffset(Math.Max(0, TabsScrollViewer.HorizontalOffset - 160));
+    }
+
+    private void ScrollTabsRight_Click(object sender, RoutedEventArgs e)
+    {
+        TabsScrollViewer.ScrollToHorizontalOffset(TabsScrollViewer.HorizontalOffset + 160);
     }
 
     private void Minimize_Click(object sender, RoutedEventArgs e)
