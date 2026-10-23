@@ -5,14 +5,8 @@
         Height="540" Width="620"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        Icon="pack://application:,,,/Resources/app_icon.png">
-
-    <Window.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#F3F7FC" Offset="0.0" />
-            <GradientStop Color="#E5EDF7" Offset="1.0" />
-        </LinearGradientBrush>
-    </Window.Background>
+        Icon="pack://application:,,,/Resources/app_icon.png"
+        Background="{DynamicResource WindowBackgroundBrush}">
 
     <Grid Margin="22">
         <Grid.RowDefinitions>
@@ -34,9 +28,9 @@
                 <Image Source="pack://application:,,,/Resources/app_icon.png" RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill"/>
             </Border>
             <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                <TextBlock Text="Settings &amp; Preferences" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+                <TextBlock Text="Settings &amp; Preferences" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}"/>
                 <TextBlock Text="Customize application theme, networking behavior, and stored data." 
-                           Foreground="{StaticResource SecondaryTextBrush}" FontSize="12" Margin="0,2,0,0"/>
+                           Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,2,0,0"/>
             </StackPanel>
         </Grid>
 
@@ -44,12 +38,12 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <StackPanel>
                 <!-- Section 1: Appearance & Theme -->
-                <Border Background="{StaticResource GlassPanelGradient}" 
-                        BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" 
-                        CornerRadius="12" Padding="16" Margin="0,0,0,14" Effect="{StaticResource GlassCardShadow}">
+                <Border Background="{DynamicResource GlassPanelGradient}" 
+                        BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
+                        CornerRadius="12" Padding="16" Margin="0,0,0,14" Effect="{DynamicResource GlassCardShadow}">
                     <StackPanel>
-                        <TextBlock Text="Appearance &amp; Theme" FontWeight="Bold" FontSize="14" Foreground="{StaticResource PrimaryTextBrush}" Margin="0,0,0,10"/>
-                        <TextBlock Text="Choose the visual theme for the frosted glass interface:" Foreground="{StaticResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,12"/>
+                        <TextBlock Text="Appearance &amp; Theme" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
+                        <TextBlock Text="Choose the visual theme for the frosted glass interface:" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,12"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -58,26 +52,26 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Light Glass Option -->
-                            <Border Grid.Column="0" Margin="0,0,8,0" Background="{StaticResource GlassCardBrush}" 
-                                    BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" CornerRadius="10" Padding="12">
+                            <Border Grid.Column="0" Margin="0,0,8,0" Background="{DynamicResource GlassCardBrush}" 
+                                    BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" CornerRadius="10" Padding="12">
                                 <StackPanel>
                                     <RadioButton Content="Light Glass" GroupName="ThemeGroup" 
                                                  FontWeight="SemiBold" FontSize="13"
                                                  IsChecked="{Binding SelectedTheme, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Light}"/>
                                     <TextBlock Text="Crisp translucent white with signature corporate blue highlights" 
-                                               Foreground="{StaticResource SecondaryTextBrush}" FontSize="11" Margin="20,6,0,0" TextWrapping="Wrap"/>
+                                               Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11" Margin="20,6,0,0" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </Border>
 
                             <!-- Dark Glass Option -->
-                            <Border Grid.Column="1" Margin="8,0,0,0" Background="{StaticResource GlassCardBrush}" 
-                                    BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" CornerRadius="10" Padding="12">
+                            <Border Grid.Column="1" Margin="8,0,0,0" Background="{DynamicResource GlassCardBrush}" 
+                                    BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" CornerRadius="10" Padding="12">
                                 <StackPanel>
                                     <RadioButton Content="Dark Glass" GroupName="ThemeGroup" 
                                                  FontWeight="SemiBold" FontSize="13"
                                                  IsChecked="{Binding SelectedTheme, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Dark}"/>
                                     <TextBlock Text="Deep navy frosted acrylic with glowing cyan and blue accents" 
-                                               Foreground="{StaticResource SecondaryTextBrush}" FontSize="11" Margin="20,6,0,0" TextWrapping="Wrap"/>
+                                               Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11" Margin="20,6,0,0" TextWrapping="Wrap"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -85,11 +79,11 @@
                 </Border>
 
                 <!-- Section 2: Request & Network Defaults -->
-                <Border Background="{StaticResource GlassPanelGradient}" 
-                        BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" 
-                        CornerRadius="12" Padding="16" Margin="0,0,0,14" Effect="{StaticResource GlassCardShadow}">
+                <Border Background="{DynamicResource GlassPanelGradient}" 
+                        BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
+                        CornerRadius="12" Padding="16" Margin="0,0,0,14" Effect="{DynamicResource GlassCardShadow}">
                     <StackPanel>
-                        <TextBlock Text="Request Defaults" FontWeight="Bold" FontSize="14" Foreground="{StaticResource PrimaryTextBrush}" Margin="0,0,0,12"/>
+                        <TextBlock Text="Request Defaults" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,12"/>
 
                         <Grid Margin="0,0,0,12">
                             <Grid.ColumnDefinitions>
@@ -97,8 +91,8 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                <TextBlock Text="Default Request Timeout (seconds)" FontWeight="Medium" Foreground="{StaticResource PrimaryTextBrush}"/>
-                                <TextBlock Text="Maximum time allowed for HTTP request execution before timeout" Foreground="{StaticResource SecondaryTextBrush}" FontSize="11"/>
+                                <TextBlock Text="Default Request Timeout (seconds)" FontWeight="Medium" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                <TextBlock Text="Maximum time allowed for HTTP request execution before timeout" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11"/>
                             </StackPanel>
                             <TextBox Grid.Column="1" Text="{Binding TimeoutSeconds, UpdateSourceTrigger=PropertyChanged}" Height="34" VerticalContentAlignment="Center"/>
                         </Grid>
@@ -110,18 +104,18 @@
                 </Border>
 
                 <!-- Section 3: Data Management -->
-                <Border Background="{StaticResource GlassPanelGradient}" 
-                        BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" 
-                        CornerRadius="12" Padding="16" Effect="{StaticResource GlassCardShadow}">
+                <Border Background="{DynamicResource GlassPanelGradient}" 
+                        BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
+                        CornerRadius="12" Padding="16" Effect="{DynamicResource GlassCardShadow}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="Local History Storage" FontWeight="Bold" FontSize="14" Foreground="{StaticResource PrimaryTextBrush}"/>
+                            <TextBlock Text="Local History Storage" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource PrimaryTextBrush}"/>
                             <TextBlock Text="{Binding HistoryCount, StringFormat='Currently storing {0} requests in sanitized local history.'}" 
-                                       Foreground="{StaticResource SecondaryTextBrush}" FontSize="12" Margin="0,4,0,0"/>
+                                       Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <Button Grid.Column="1" Content="Clear History" Style="{StaticResource DangerButton}" 
                                 Command="{Binding ClearHistoryCommand}" Height="34" Padding="14,4"/>

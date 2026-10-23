@@ -51,6 +51,32 @@
     <SolidColorBrush x:Key="GlassBorderBrush" Color="{StaticResource GlassBorderColor}" />
     <SolidColorBrush x:Key="GlassBorderDarkBrush" Color="{StaticResource GlassBorderDarkColor}" />
 
+    <!-- Ambient & Window Brushes -->
+    <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#F3F7FC" Offset="0.0" />
+        <GradientStop Color="#E5EDF7" Offset="0.5" />
+        <GradientStop Color="#DDE7F5" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <RadialGradientBrush x:Key="AmbientGlow1Brush" Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+        <GradientStop Color="#2400A3E0" Offset="0.0" />
+        <GradientStop Color="#0000A3E0" Offset="1.0" />
+    </RadialGradientBrush>
+
+    <RadialGradientBrush x:Key="AmbientGlow2Brush" Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+        <GradientStop Color="#1A00338D" Offset="0.0" />
+        <GradientStop Color="#0000338D" Offset="1.0" />
+    </RadialGradientBrush>
+
+    <RadialGradientBrush x:Key="AmbientGlow3Brush" Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+        <GradientStop Color="#10005EB8" Offset="0.0" />
+        <GradientStop Color="#00005EB8" Offset="1.0" />
+    </RadialGradientBrush>
+
+    <SolidColorBrush x:Key="InputBackgroundBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="CodeBackgroundBrush" Color="#F8FBFE" />
+    <SolidColorBrush x:Key="CodeForegroundBrush" Color="#0F1D38" />
+
     <!-- Frosted Glass Linear Gradients -->
     <LinearGradientBrush x:Key="GlassPanelGradient" StartPoint="0,0" EndPoint="1,1">
         <GradientStop Color="#F5FFFFFF" Offset="0.0" />

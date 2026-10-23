@@ -12,16 +12,8 @@
         Height="820" Width="1240"
         MinHeight="620" MinWidth="960"
         WindowStartupLocation="CenterScreen"
-        Icon="Resources/app_icon.png">
-
-    <Window.Background>
-        <!-- Atmospheric Mesh Gradient for Frosted Glass Depth -->
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#F3F7FC" Offset="0.0" />
-            <GradientStop Color="#E5EDF7" Offset="0.5" />
-            <GradientStop Color="#DDE7F5" Offset="1.0" />
-        </LinearGradientBrush>
-    </Window.Background>
+        Icon="Resources/app_icon.png"
+        Background="{DynamicResource WindowBackgroundBrush}">
 
     <Window.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVis"/>
@@ -77,27 +69,16 @@
 
     <!-- Main Outer Container with Ambient Glass Lighting Orbs -->
     <Grid>
-        <!-- Ambient Glass Light Glows in Background -->
+        <!-- Ambient Glass Light Glows in Background (dynamic glowing orbs visible through transparent panels) -->
         <Canvas IsHitTestVisible="False">
-            <!-- Top-Right Accent Glow -->
-            <Ellipse Width="450" Height="450" Canvas.Right="-80" Canvas.Top="-100">
-                <Ellipse.Fill>
-                    <RadialGradientBrush Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                        <GradientStop Color="#2400A3E0" Offset="0.0" />
-                        <GradientStop Color="#0000A3E0" Offset="1.0" />
-                    </RadialGradientBrush>
-                </Ellipse.Fill>
-            </Ellipse>
+            <!-- Top-Right Vibrant Neon Accent Glow -->
+            <Ellipse Width="550" Height="550" Canvas.Right="-80" Canvas.Top="-100" Fill="{DynamicResource AmbientGlow1Brush}"/>
 
-            <!-- Bottom-Left Deep Navy Glow -->
-            <Ellipse Width="550" Height="550" Canvas.Left="-120" Canvas.Bottom="-150">
-                <Ellipse.Fill>
-                    <RadialGradientBrush Center="0.5,0.5" GradientOrigin="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                        <GradientStop Color="#1A00338D" Offset="0.0" />
-                        <GradientStop Color="#0000338D" Offset="1.0" />
-                    </RadialGradientBrush>
-                </Ellipse.Fill>
-            </Ellipse>
+            <!-- Bottom-Left Deep Cobalt / Navy Glow -->
+            <Ellipse Width="650" Height="650" Canvas.Left="-120" Canvas.Bottom="-150" Fill="{DynamicResource AmbientGlow2Brush}"/>
+
+            <!-- Center-Right Ambient Glow -->
+            <Ellipse Width="450" Height="450" Canvas.Right="120" Canvas.Bottom="-80" Fill="{DynamicResource AmbientGlow3Brush}"/>
         </Canvas>
 
         <!-- Main Structure -->
@@ -109,12 +90,12 @@
 
             <!-- FROSTED GLASS HEADER BAR -->
             <Border Grid.Row="0" Margin="14,10,14,0" 
-                    Background="{StaticResource GlassPanelGradient}" 
-                    BorderBrush="{StaticResource GlassBorderGradient}" 
+                    Background="{DynamicResource GlassPanelGradient}" 
+                    BorderBrush="{DynamicResource GlassBorderGradient}" 
                     BorderThickness="1" 
                     CornerRadius="12" 
                     Padding="16,0"
-                    Effect="{StaticResource GlassSubtleShadow}">
+                    Effect="{DynamicResource GlassSubtleShadow}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -132,19 +113,19 @@
                             <Image Source="Resources/app_icon.png" RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill"/>
                         </Border>
                         <TextBlock Text="ApiStudio" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}" VerticalAlignment="Center"/>
-                        <Border Background="{StaticResource GlassSubtleBrush}" BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                        <Border Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
                             <TextBlock Text="PRO" FontSize="10" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
                         </Border>
                     </StackPanel>
 
                     <!-- Center Environment Selector Pill -->
                     <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                            Background="{StaticResource GlassSubtleBrush}" BorderBrush="{StaticResource GlassBorderGradient}" 
+                            Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" 
                             BorderThickness="1" CornerRadius="8" Padding="8,4">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconEnvironment}" Fill="{StaticResource SecondaryTextBrush}" 
+                            <Path Data="{StaticResource IconEnvironment}" Fill="{DynamicResource SecondaryTextBrush}" 
                                   Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0"/>
-                            <TextBlock Text="Environment:" Foreground="{StaticResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Medium"/>
+                            <TextBlock Text="Environment:" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Medium"/>
                             <ComboBox ItemsSource="{Binding Environments}" SelectedItem="{Binding SelectedEnvironment}" 
                                       DisplayMemberPath="Name" Width="150" Height="28" VerticalContentAlignment="Center"/>
                             <Button Content="Manage" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,2" Margin="8,0,0,0" Click="ManageEnvironments_Click"/>
@@ -156,7 +137,7 @@
                         <Button Content="cURL Import" Style="{StaticResource SecondaryButton}" Height="32" Margin="0,0,8,0" Command="{Binding ImportCurlCommand}"/>
                         <Button Content="Run Tests" Style="{StaticResource SecondaryButton}" Height="32" Margin="0,0,8,0" Command="{Binding OpenRunnerCommand}"/>
                         <Button Style="{StaticResource IconButton}" Height="34" Width="34" ToolTip="Settings &amp; Theme" Command="{Binding OpenSettingsCommand}">
-                            <Path Data="{StaticResource IconSettings}" Fill="{StaticResource SecondaryTextBrush}" Width="16" Height="16" Stretch="Uniform"/>
+                            <Path Data="{StaticResource IconSettings}" Fill="{DynamicResource SecondaryTextBrush}" Width="16" Height="16" Stretch="Uniform"/>
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -172,11 +153,11 @@
 
                 <!-- LEFT SIDEBAR: FLOATING FROSTED GLASS CARD -->
                 <Border Grid.Column="0" 
-                        Background="{StaticResource GlassPanelGradient}" 
-                        BorderBrush="{StaticResource GlassBorderGradient}" 
+                        Background="{DynamicResource GlassPanelGradient}" 
+                        BorderBrush="{DynamicResource GlassBorderGradient}" 
                         BorderThickness="1" 
                         CornerRadius="14" 
-                        Effect="{StaticResource GlassCardShadow}">
+                        Effect="{DynamicResource GlassCardShadow}">
                     <Grid Margin="12">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -186,7 +167,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- Segmented Navigation Pill Tabs -->
-                        <Border Grid.Row="0" Background="{StaticResource GlassSubtleBrush}" BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" CornerRadius="10" Padding="3" Margin="0,0,0,12">
+                        <Border Grid.Row="0" Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" CornerRadius="10" Padding="3" Margin="0,0,0,12">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -206,7 +187,7 @@
                             <Grid>
                                 <TextBox Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" 
                                          Padding="28,7,10,7" VerticalContentAlignment="Center"/>
-                                <Path Data="{StaticResource IconSearch}" Fill="{StaticResource SecondaryTextBrush}" 
+                                <Path Data="{StaticResource IconSearch}" Fill="{DynamicResource SecondaryTextBrush}" 
                                       Width="13" Height="13" Stretch="Uniform" HorizontalAlignment="Left" Margin="10,0,0,0" IsHitTestVisible="False"/>
                             </Grid>
                         </Border>
@@ -223,7 +204,7 @@
                                                     CornerRadius="4" Padding="5,2" Margin="0,0,8,0">
                                                 <TextBlock Text="{Binding Method}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10"/>
                                             </Border>
-                                            <TextBlock Text="{Binding Name}" Foreground="{StaticResource PrimaryTextBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="13" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </HierarchicalDataTemplate>
                                 </TreeView.ItemTemplate>
@@ -243,7 +224,7 @@
                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="8,8" Cursor="Hand" Background="Transparent">
+                                        <Border BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="8,8" Cursor="Hand" Background="Transparent">
                                             <Border.InputBindings>
                                                 <MouseBinding Gesture="LeftClick" Command="{Binding OpenCommand}"/>
                                             </Border.InputBindings>
@@ -262,13 +243,13 @@
                                                             CornerRadius="4" Padding="5,1" Margin="0,0,6,0">
                                                         <TextBlock Text="{Binding Method}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10"/>
                                                     </Border>
-                                                    <TextBlock Grid.Column="1" Text="{Binding Url}" Foreground="{StaticResource PrimaryTextBrush}" 
+                                                    <TextBlock Grid.Column="1" Text="{Binding Url}" Foreground="{DynamicResource PrimaryTextBrush}" 
                                                                FontSize="12" TextTrimming="CharacterEllipsis"/>
                                                     <TextBlock Grid.Column="2" Text="{Binding StatusCode}" FontWeight="Bold" FontSize="11"
                                                                Foreground="{Binding StatusCode, Converter={StaticResource StatusBrushConv}}" Margin="4,0,0,0"/>
                                                 </Grid>
                                                 <TextBlock Grid.Row="1" Text="{Binding ExecutedAt, StringFormat='{}{0:HH:mm:ss} • {1} ms', TargetNullValue=''}" 
-                                                           Foreground="{StaticResource SecondaryTextBrush}" FontSize="11" Margin="0,4,0,0"/>
+                                                           Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11" Margin="0,4,0,0"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>
@@ -277,7 +258,7 @@
                         </Grid>
 
                         <!-- Sidebar Footer Buttons -->
-                        <Border Grid.Row="3" BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="0,1,0,0" Padding="0,10,0,0">
+                        <Border Grid.Row="3" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,1,0,0" Padding="0,10,0,0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -322,8 +303,8 @@
                                         <Border Margin="0,0,6,0" Cursor="Hand" MouseLeftButtonUp="OnTabItemClick">
                                             <Border.Style>
                                                 <Style TargetType="Border">
-                                                    <Setter Property="Background" Value="{StaticResource GlassSubtleBrush}" />
-                                                    <Setter Property="BorderBrush" Value="{StaticResource GlassBorderGradient}" />
+                                                    <Setter Property="Background" Value="{DynamicResource GlassSubtleBrush}" />
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource GlassBorderGradient}" />
                                                     <Setter Property="BorderThickness" Value="1" />
                                                     <Setter Property="CornerRadius" Value="10" />
                                                     <Setter Property="Padding" Value="12,6" />
@@ -331,10 +312,10 @@
                                                     <Style.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
                                                             <Setter Property="Opacity" Value="1.0" />
-                                                            <Setter Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                            <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
                                                         </Trigger>
                                                         <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                            <Setter Property="Background" Value="{StaticResource GlassCardBrush}" />
+                                                            <Setter Property="Background" Value="{DynamicResource GlassCardBrush}" />
                                                             <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}" />
                                                             <Setter Property="BorderThickness" Value="1.5" />
                                                             <Setter Property="Opacity" Value="1.0" />
@@ -353,7 +334,7 @@
                                                         CornerRadius="4" Padding="5,1" Margin="0,0,8,0">
                                                     <TextBlock Text="{Binding MethodString}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10"/>
                                                 </Border>
-                                                <TextBlock Text="{Binding Name}" Foreground="{StaticResource PrimaryTextBrush}" FontSize="12" FontWeight="Medium" Margin="0,0,8,0"/>
+                                                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" FontWeight="Medium" Margin="0,0,8,0"/>
                                                 <TextBlock Text="*" Foreground="{StaticResource ErrorBrush}" FontWeight="Bold" 
                                                            Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" Margin="0,0,6,0"/>
                                                 <Button Content="✕" Style="{StaticResource IconButton}" Padding="2" FontSize="10" 
@@ -383,13 +364,13 @@
 
                         <!-- 1. FLOATING URL BAR GLASS CAPSULE -->
                         <Border Grid.Row="0" 
-                                Background="{StaticResource GlassPanelGradient}" 
-                                BorderBrush="{StaticResource GlassBorderGradient}" 
+                                Background="{DynamicResource GlassPanelGradient}" 
+                                BorderBrush="{DynamicResource GlassBorderGradient}" 
                                 BorderThickness="1" 
                                 CornerRadius="12" 
                                 Padding="10" 
                                 Margin="0,0,0,8"
-                                Effect="{StaticResource GlassSubtleShadow}">
+                                Effect="{DynamicResource GlassSubtleShadow}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="120"/>
@@ -439,12 +420,12 @@
 
                         <!-- 2. REQUEST CONFIGURATION TABS (FROSTED GLASS CARD) -->
                         <Border Grid.Row="1" 
-                                Background="{StaticResource GlassPanelGradient}" 
-                                BorderBrush="{StaticResource GlassBorderGradient}" 
+                                Background="{DynamicResource GlassPanelGradient}" 
+                                BorderBrush="{DynamicResource GlassBorderGradient}" 
                                 BorderThickness="1" 
                                 CornerRadius="12" 
                                 Padding="14,10" 
-                                Effect="{StaticResource GlassCardShadow}">
+                                Effect="{DynamicResource GlassCardShadow}">
                             <TabControl Style="{StaticResource ModernTabControl}">
                                 <!-- PARAMS TAB -->
                                 <TabItem Header="Params">
@@ -455,7 +436,7 @@
                                         </Grid.RowDefinitions>
                                         <DataGrid Grid.Row="0" ItemsSource="{Binding QueryParams}" AutoGenerateColumns="False" 
                                                   CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                  BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" 
+                                                  BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
                                                   Background="Transparent" RowHeaderWidth="0">
                                             <DataGrid.Columns>
                                                 <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
@@ -486,7 +467,7 @@
                                         </Grid.RowDefinitions>
                                         <DataGrid Grid.Row="0" ItemsSource="{Binding Headers}" AutoGenerateColumns="False" 
                                                   CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                  BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" 
+                                                  BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
                                                   Background="Transparent" RowHeaderWidth="0">
                                             <DataGrid.Columns>
                                                 <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
@@ -552,7 +533,7 @@
 
                                         <!-- Body Type Selector -->
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                            <TextBlock Text="Content Type:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{StaticResource SecondaryTextBrush}"/>
+                                            <TextBlock Text="Content Type:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource SecondaryTextBrush}"/>
                                             <ComboBox ItemsSource="{Binding Source={StaticResource BodyTypes}}" 
                                                       SelectedItem="{Binding SelectedBodyType}" Width="160" VerticalContentAlignment="Center"/>
                                             <Button Content="Format JSON" Style="{StaticResource SecondaryButton}" 
@@ -573,7 +554,7 @@
                                             </Grid.RowDefinitions>
                                             <DataGrid Grid.Row="0" ItemsSource="{Binding UrlEncodedParams}" AutoGenerateColumns="False" 
                                                       CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                      BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
+                                                      BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
                                                 <DataGrid.Columns>
                                                     <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled}" Width="50"/>
                                                     <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="200"/>
@@ -599,7 +580,7 @@
                                             </Grid.RowDefinitions>
                                             <DataGrid Grid.Row="0" ItemsSource="{Binding FormDataParams}" AutoGenerateColumns="False" 
                                                       CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                      BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
+                                                      BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
                                                 <DataGrid.Columns>
                                                     <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled}" Width="50"/>
                                                     <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="200"/>
@@ -621,7 +602,7 @@
                                         <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,16,0,0"
                                                     Visibility="{Binding SelectedBodyType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:BodyType.BinaryFile}}">
                                             <Button Content="Select File..." Style="{StaticResource SecondaryButton}" Command="{Binding SelectFileCommand}" Margin="0,0,10,0"/>
-                                            <TextBlock Text="{Binding BinaryFilePath, TargetNullValue='No file selected'}" VerticalAlignment="Center" Foreground="{StaticResource PrimaryTextBrush}"/>
+                                            <TextBlock Text="{Binding BinaryFilePath, TargetNullValue='No file selected'}" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
                                         </StackPanel>
                                     </Grid>
                                 </TabItem>
@@ -635,7 +616,7 @@
                                         </Grid.RowDefinitions>
                                         <DataGrid Grid.Row="0" ItemsSource="{Binding Assertions}" AutoGenerateColumns="False" 
                                                   CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                  BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
+                                                  BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
                                             <DataGrid.Columns>
                                                 <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled}" Width="50"/>
                                                 <DataGridComboBoxColumn Header="Target" SelectedItemBinding="{Binding Target}" 
@@ -665,12 +646,12 @@
 
                         <!-- 4. RESPONSE VIEWER: FLOATING FROSTED GLASS CARD -->
                         <Border Grid.Row="3" 
-                                Background="{StaticResource GlassPanelGradient}" 
-                                BorderBrush="{StaticResource GlassBorderGradient}" 
+                                Background="{DynamicResource GlassPanelGradient}" 
+                                BorderBrush="{DynamicResource GlassBorderGradient}" 
                                 BorderThickness="1" 
                                 CornerRadius="12" 
                                 Padding="16,12" 
-                                Effect="{StaticResource GlassCardShadow}">
+                                Effect="{DynamicResource GlassCardShadow}">
                             <Grid DataContext="{Binding Response}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -678,7 +659,7 @@
                                 </Grid.RowDefinitions>
 
                                 <!-- Response Status Metrics & Action Bar -->
-                                <Border Grid.Row="0" BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="0,0,0,10">
+                                <Border Grid.Row="0" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="0,0,0,10">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -705,26 +686,26 @@
                                             </Border>
 
                                             <!-- Time Pill -->
-                                            <Border Background="{StaticResource GlassSubtleBrush}" 
-                                                    BorderBrush="{StaticResource GlassBorderGradient}" 
+                                            <Border Background="{DynamicResource GlassSubtleBrush}" 
+                                                    BorderBrush="{DynamicResource GlassBorderGradient}" 
                                                     BorderThickness="1" 
                                                     CornerRadius="8" 
                                                     Padding="8,4" 
                                                     Margin="0,0,10,0"
                                                     Visibility="{Binding HasResponse, Converter={StaticResource BoolToVis}}">
                                                 <TextBlock Text="{Binding ElapsedMilliseconds, StringFormat='{}{0} ms'}" 
-                                                           FontWeight="SemiBold" FontSize="12" Foreground="{StaticResource PrimaryTextBrush}"/>
+                                                           FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource PrimaryTextBrush}"/>
                                             </Border>
 
                                             <!-- Size Pill -->
-                                            <Border Background="{StaticResource GlassSubtleBrush}" 
-                                                    BorderBrush="{StaticResource GlassBorderGradient}" 
+                                            <Border Background="{DynamicResource GlassSubtleBrush}" 
+                                                    BorderBrush="{DynamicResource GlassBorderGradient}" 
                                                     BorderThickness="1" 
                                                     CornerRadius="8" 
                                                     Padding="8,4"
                                                     Visibility="{Binding HasResponse, Converter={StaticResource BoolToVis}}">
                                                 <TextBlock Text="{Binding ContentSizeBytes, Converter={StaticResource BytesConv}}" 
-                                                           FontWeight="SemiBold" FontSize="12" Foreground="{StaticResource PrimaryTextBrush}"/>
+                                                           FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource PrimaryTextBrush}"/>
                                             </Border>
                                         </StackPanel>
 
@@ -756,7 +737,7 @@
                                     <TabItem Header="Headers">
                                         <DataGrid ItemsSource="{Binding Headers}" AutoGenerateColumns="False" 
                                                   IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                  BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" 
+                                                  BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
                                                   Background="Transparent" Margin="0,6,0,0">
                                             <DataGrid.Columns>
                                                 <DataGridTextColumn Header="Header" Binding="{Binding Key}" Width="250" FontWeight="SemiBold"/>
@@ -768,7 +749,7 @@
                                     <!-- COOKIES -->
                                     <TabItem Header="Cookies">
                                         <ListView ItemsSource="{Binding Cookies}" BorderThickness="1" 
-                                                  BorderBrush="{StaticResource GlassBorderGradient}" Background="Transparent" Margin="0,6,0,0">
+                                                  BorderBrush="{DynamicResource GlassBorderGradient}" Background="Transparent" Margin="0,6,0,0">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding}" FontFamily="Cascadia Code, Consolas, monospace" Padding="4,6"/>
@@ -780,10 +761,10 @@
                                     <!-- TEST RESULTS -->
                                     <TabItem Header="Test Results">
                                         <ListView ItemsSource="{Binding TestResults}" BorderThickness="1" 
-                                                  BorderBrush="{StaticResource GlassBorderGradient}" Background="Transparent" Margin="0,6,0,0">
+                                                  BorderBrush="{DynamicResource GlassBorderGradient}" Background="Transparent" Margin="0,6,0,0">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="8,6">
+                                                    <Border BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="8,6">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="70"/>

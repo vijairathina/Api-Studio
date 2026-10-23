@@ -1,6 +1,9 @@
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Effects;
 using ApiStudio.Application.Abstractions;
 using ApiStudio.Domain.Entities;
 using ApiStudio.Domain.Enums;
@@ -196,6 +199,11 @@ public class MainViewModel : ObservableObject
         {
             AddNewTab();
         }
+
+        // 5. Load User Preferences (Theme)
+        var prefs = await _preferencesRepository.GetAsync();
+        IsDarkTheme = prefs.Theme.Equals("Dark", StringComparison.OrdinalIgnoreCase);
+        ApplyTheme(IsDarkTheme);
     }
 
     public IDictionary<string, string> GetActiveVariables()
@@ -532,73 +540,198 @@ public class MainViewModel : ObservableObject
 
     private static void ApplyTheme(bool isDark)
     {
-        var appResources = System.Windows.Application.Current.Resources;
+        var appResources = System.Windows.Application.Current?.Resources;
+        if (appResources == null) return;
 
         if (isDark)
         {
-            appResources["LightBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#0B132B"));
-            appResources["PanelBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#131D3B"));
-            appResources["GlassCardBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#E6131D3B"));
-            appResources["GlassSubtleBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#B31C284D"));
-            appResources["SubtleBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#1E2C52"));
-            appResources["HoverBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#253664"));
-            appResources["PrimaryTextBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F8FAFC"));
-            appResources["SecondaryTextBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#94A3B8"));
-            appResources["BorderBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#263859"));
+            // Transparent Frosted Acrylic Dark Theme (matching generated preview.png)
+            appResources["WindowBackgroundBrush"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#060B14"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#0A1222"), 0.5),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#080D1A"), 1.0)
+                },
+                new Point(0, 0), new Point(1, 1));
 
-            var darkPanelGrad = new System.Windows.Media.LinearGradientBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F0131E3D"),
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#D90E162E"),
-                new System.Windows.Point(0, 0), new System.Windows.Point(1, 1));
-            appResources["GlassPanelGradient"] = darkPanelGrad;
+            appResources["AmbientGlow1Brush"] = new RadialGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#4400D2FF"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#0000D2FF"), 1.0)
+                });
 
-            var darkBorderGrad = new System.Windows.Media.LinearGradientBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#4D38507A"),
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#261E2E4A"),
-                new System.Windows.Point(0, 0), new System.Windows.Point(1, 1));
-            appResources["GlassBorderGradient"] = darkBorderGrad;
+            appResources["AmbientGlow2Brush"] = new RadialGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#360052CC"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#000052CC"), 1.0)
+                });
+
+            appResources["AmbientGlow3Brush"] = new RadialGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#284F46E5"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#004F46E5"), 1.0)
+                });
+
+            // Frosted Dark Glass Panels (~72% to ~55% smoked transparency)
+            appResources["GlassPanelGradient"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#BA0D172B"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#8C0A1222"), 1.0)
+                },
+                new Point(0, 0), new Point(1, 1));
+
+            appResources["GlassCardBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#99121E36"));
+            appResources["GlassSubtleBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4D152542"));
+
+            // Specular Glass Border Highlight
+            appResources["GlassBorderGradient"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#4D5C92D1"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#20284873"), 0.5),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#453A689E"), 1.0)
+                },
+                new Point(0, 0), new Point(1, 1));
+
+            appResources["GlassBorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#335C92D1"));
+            appResources["BorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#243854"));
+            appResources["InputBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#73080F1D"));
+            appResources["HoverBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#38233C64"));
+            appResources["SubtleBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33182846"));
+            appResources["PanelBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#B30A1222"));
+            appResources["LightBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#060B14"));
+
+            appResources["PrimaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8FAFC"));
+            appResources["SecondaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8"));
+
+            appResources["CodeBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8C050912"));
+            appResources["CodeForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#38BDF8"));
+
+            appResources["GlassCardShadow"] = new DropShadowEffect
+            {
+                BlurRadius = 26,
+                Direction = 270,
+                ShadowDepth = 6,
+                Color = (Color)ColorConverter.ConvertFromString("#000000"),
+                Opacity = 0.45
+            };
+
+            appResources["GlassSubtleShadow"] = new DropShadowEffect
+            {
+                BlurRadius = 14,
+                Direction = 270,
+                ShadowDepth = 2,
+                Color = (Color)ColorConverter.ConvertFromString("#000000"),
+                Opacity = 0.30
+            };
+
+            appResources["ButtonGlowBlue"] = new DropShadowEffect
+            {
+                BlurRadius = 18,
+                Direction = 270,
+                ShadowDepth = 3,
+                Color = (Color)ColorConverter.ConvertFromString("#0066FF"),
+                Opacity = 0.55
+            };
         }
         else
         {
-            appResources["LightBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#EDF3FA"));
-            appResources["PanelBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFFFFF"));
-            appResources["GlassCardBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F2FFFFFF"));
-            appResources["GlassSubtleBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#A0EDF4FB"));
-            appResources["SubtleBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#E8F0FA"));
-            appResources["HoverBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#E2ECF8"));
-            appResources["PrimaryTextBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#0F1D38"));
-            appResources["SecondaryTextBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#5A6A85"));
-            appResources["BorderBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#D2DEF2"));
+            // Crisp Frosted Porcelain Light Glass Theme
+            appResources["WindowBackgroundBrush"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#F3F7FC"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#E5EDF7"), 0.5),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#DDE7F5"), 1.0)
+                },
+                new Point(0, 0), new Point(1, 1));
 
-            var lightPanelGrad = new System.Windows.Media.LinearGradientBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F5FFFFFF"),
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#D6F0F6FC"),
-                new System.Windows.Point(0, 0), new System.Windows.Point(1, 1));
-            appResources["GlassPanelGradient"] = lightPanelGrad;
+            appResources["AmbientGlow1Brush"] = new RadialGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#2400A3E0"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#0000A3E0"), 1.0)
+                });
 
-            var lightBorderGrad = new System.Windows.Media.LinearGradientBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#B3FFFFFF"),
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#40D0E2F5"),
-                new System.Windows.Point(0, 0), new System.Windows.Point(1, 1));
-            appResources["GlassBorderGradient"] = lightBorderGrad;
+            appResources["AmbientGlow2Brush"] = new RadialGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#1A00338D"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#0000338D"), 1.0)
+                });
+
+            appResources["AmbientGlow3Brush"] = new RadialGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#10005EB8"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#00005EB8"), 1.0)
+                });
+
+            appResources["GlassPanelGradient"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#F5FFFFFF"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#D6F0F6FC"), 1.0)
+                },
+                new Point(0, 0), new Point(1, 1));
+
+            appResources["GlassCardBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F2FFFFFF"));
+            appResources["GlassSubtleBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#A0EDF4FB"));
+
+            appResources["GlassBorderGradient"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#B3FFFFFF"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#40D0E2F5"), 0.5),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#73FFFFFF"), 1.0)
+                },
+                new Point(0, 0), new Point(1, 1));
+
+            appResources["GlassBorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#66FFFFFF"));
+            appResources["BorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D2DEF2"));
+            appResources["InputBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFFFF"));
+            appResources["HoverBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E2ECF8"));
+            appResources["SubtleBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8F0FA"));
+            appResources["PanelBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFFFF"));
+            appResources["LightBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EDF3FA"));
+
+            appResources["PrimaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0F1D38"));
+            appResources["SecondaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#5A6A85"));
+
+            appResources["CodeBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8FBFE"));
+            appResources["CodeForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0F1D38"));
+
+            appResources["GlassCardShadow"] = new DropShadowEffect
+            {
+                BlurRadius = 22,
+                Direction = 270,
+                ShadowDepth = 4,
+                Color = (Color)ColorConverter.ConvertFromString("#001838"),
+                Opacity = 0.07
+            };
+
+            appResources["GlassSubtleShadow"] = new DropShadowEffect
+            {
+                BlurRadius = 12,
+                Direction = 270,
+                ShadowDepth = 2,
+                Color = (Color)ColorConverter.ConvertFromString("#001433"),
+                Opacity = 0.05
+            };
+
+            appResources["ButtonGlowBlue"] = new DropShadowEffect
+            {
+                BlurRadius = 16,
+                Direction = 270,
+                ShadowDepth = 3,
+                Color = (Color)ColorConverter.ConvertFromString("#0052CC"),
+                Opacity = 0.45
+            };
         }
     }
 
