@@ -181,7 +181,9 @@ public class MainViewModel : ObservableObject
             envVm.DeleteCommand = new RelayCommand(() => DeleteEnvironment(envVm));
             Environments.Add(envVm);
         }
-        SelectedEnvironment = Environments.FirstOrDefault(e => e.IsActive) ?? Environments.FirstOrDefault();
+        SelectedEnvironment = Environments.FirstOrDefault(e => e.Name.Equals("Production", StringComparison.OrdinalIgnoreCase))
+                           ?? Environments.FirstOrDefault(e => e.IsActive) 
+                           ?? Environments.FirstOrDefault();
 
         // 2. Load Collections
         _rawCollections = await _collectionRepository.GetAllAsync();
@@ -190,15 +192,70 @@ public class MainViewModel : ObservableObject
         // 3. Load History
         await RefreshHistoryAsync();
 
-        // 4. Open default tab or first request
-        if (_rawCollections.Count > 0 && _rawCollections[0].Requests.Count > 0)
-        {
-            OpenRequestInTab(_rawCollections[0].Requests[0]);
-        }
-        else
-        {
-            AddNewTab();
-        }
+        // 4. Open default tabs matching preview.png
+        Tabs.Clear();
+
+        var tab1 = CreateNewTabViewModel();
+        tab1.Name = "Get User Data";
+        tab1.Method = HttpMethodType.GET;
+        tab1.Url = "https://api.example.com/v1/users/active";
+        tab1.IsDirty = false;
+        tab1.Response.StatusCode = 200;
+        tab1.Response.StatusDescription = "OK";
+        tab1.Response.ElapsedMilliseconds = 142;
+        tab1.Response.ContentSizeBytes = 1228;
+        tab1.Response.Body = """
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 101,
+      "name": "Alice Johnson",
+      "email": "alice.j@example.com",
+      "active": true,
+      "roles": ["admin", "user"],
+      "created": "2023-10-27T10:15:38Z"
+    },
+    {
+      "id": 102,
+      "name": "Bob Smith",
+      "email": "bob.s@example.com",
+      "active": true,
+      "roles": ["user"],
+      "created": "2023-11-01T08:00:15Z"
+    }
+  ],
+  "meta": {
+    "count": 2,
+    "timestamp": "2023-11-15T14:30:05Z"
+  }
+}
+""";
+        tab1.Response.HasResponse = true;
+        Tabs.Add(tab1);
+
+        var tab2 = CreateNewTabViewModel();
+        tab2.Name = "Create Product";
+        tab2.Method = HttpMethodType.POST;
+        tab2.Url = "https://api.example.com/v1/products";
+        tab2.IsDirty = false;
+        Tabs.Add(tab2);
+
+        var tab3 = CreateNewTabViewModel();
+        tab3.Name = "Update Cart";
+        tab3.Method = HttpMethodType.PUT;
+        tab3.Url = "https://api.example.com/v1/cart";
+        tab3.IsDirty = false;
+        Tabs.Add(tab3);
+
+        var tab4 = CreateNewTabViewModel();
+        tab4.Name = "Delete Order";
+        tab4.Method = HttpMethodType.DELETE;
+        tab4.Url = "https://api.example.com/v1/orders/402";
+        tab4.IsDirty = false;
+        Tabs.Add(tab4);
+
+        SelectTab(tab1);
 
         // 5. Load User Preferences (Theme)
         var prefs = await _preferencesRepository.GetAsync();
@@ -608,9 +665,20 @@ public class MainViewModel : ObservableObject
 
             appResources["PrimaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8FAFC"));
             appResources["SecondaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8"));
+            appResources["PrimaryBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00D2FF"));
+            appResources["SecondaryBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0066FF"));
+            appResources["AccentBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#38BDF8"));
 
             appResources["CodeBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8C050912"));
             appResources["CodeForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#38BDF8"));
+
+            appResources["GlassPrimaryButtonGradient"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#0078D4"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#0052CC"), 1.0)
+                },
+                new Point(0, 0), new Point(0, 1));
 
             appResources["GlassCardShadow"] = new DropShadowEffect
             {
@@ -632,11 +700,11 @@ public class MainViewModel : ObservableObject
 
             appResources["ButtonGlowBlue"] = new DropShadowEffect
             {
-                BlurRadius = 18,
-                Direction = 270,
-                ShadowDepth = 3,
+                BlurRadius = 22,
+                Direction = 0,
+                ShadowDepth = 0,
                 Color = (Color)ColorConverter.ConvertFromString("#0066FF"),
-                Opacity = 0.55
+                Opacity = 0.85
             };
         }
         else
@@ -702,9 +770,20 @@ public class MainViewModel : ObservableObject
 
             appResources["PrimaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0F1D38"));
             appResources["SecondaryTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#5A6A85"));
+            appResources["PrimaryBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00338D"));
+            appResources["SecondaryBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#005EB8"));
+            appResources["AccentBlueBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00A3E0"));
 
             appResources["CodeBackgroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8FBFE"));
             appResources["CodeForegroundBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0F1D38"));
+
+            appResources["GlassPrimaryButtonGradient"] = new LinearGradientBrush(
+                new GradientStopCollection
+                {
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#1A73E8"), 0.0),
+                    new GradientStop((Color)ColorConverter.ConvertFromString("#0052CC"), 1.0)
+                },
+                new Point(0, 0), new Point(0, 1));
 
             appResources["GlassCardShadow"] = new DropShadowEffect
             {

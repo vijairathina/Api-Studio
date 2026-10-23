@@ -37,7 +37,9 @@ public class JsonFileHistoryRepository : IHistoryRepository
         {
             if (!File.Exists(_filePath))
             {
-                return [];
+                var seed = CreateSeedHistory();
+                await File.WriteAllTextAsync(_filePath, JsonSerializer.Serialize(seed, JsonOptions));
+                return seed;
             }
 
             var json = await File.ReadAllTextAsync(_filePath);
@@ -46,7 +48,7 @@ public class JsonFileHistoryRepository : IHistoryRepository
         }
         catch
         {
-            return [];
+            return CreateSeedHistory();
         }
         finally
         {
@@ -129,5 +131,57 @@ public class JsonFileHistoryRepository : IHistoryRepository
                 header.Value = "••••••••";
             }
         }
+    }
+
+    private static List<RequestHistoryItem> CreateSeedHistory()
+    {
+        return
+        [
+            new RequestHistoryItem
+            {
+                Method = "GET",
+                Url = "/users/bart data",
+                StatusCode = 200,
+                StatusDescription = "OK",
+                ElapsedMilliseconds = 142,
+                ExecutedAt = DateTime.UtcNow.AddMinutes(-5),
+                RequestSnapshot = new ApiRequest
+                {
+                    Name = "Get User Data",
+                    Method = HttpMethodType.GET,
+                    Url = "https://api.example.com/v1/users/active"
+                }
+            },
+            new RequestHistoryItem
+            {
+                Method = "POST",
+                Url = "https://api.users/catalog",
+                StatusCode = 201,
+                StatusDescription = "Created",
+                ElapsedMilliseconds = 210,
+                ExecutedAt = DateTime.UtcNow.AddMinutes(-12),
+                RequestSnapshot = new ApiRequest
+                {
+                    Name = "Create Product",
+                    Method = HttpMethodType.POST,
+                    Url = "https://api.users/catalog"
+                }
+            },
+            new RequestHistoryItem
+            {
+                Method = "GET",
+                Url = "https://api.users/register",
+                StatusCode = 200,
+                StatusDescription = "OK",
+                ElapsedMilliseconds = 98,
+                ExecutedAt = DateTime.UtcNow.AddMinutes(-25),
+                RequestSnapshot = new ApiRequest
+                {
+                    Name = "Register Status",
+                    Method = HttpMethodType.GET,
+                    Url = "https://api.users/register"
+                }
+            }
+        ];
     }
 }

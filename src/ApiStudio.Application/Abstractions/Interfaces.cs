@@ -51,7 +51,7 @@ public interface IHistoryRepository
 
 public class UserPreferences
 {
-    public string Theme { get; set; } = "Light";
+    public string Theme { get; set; } = "Dark";
     public int DefaultTimeoutSeconds { get; set; } = 30;
     public bool FollowRedirects { get; set; } = true;
     public bool VerifySsl { get; set; } = true;

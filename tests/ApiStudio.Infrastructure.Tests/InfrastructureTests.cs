@@ -75,7 +75,7 @@ public class InfrastructureTests : IDisposable
         var collections = await repo.GetAllAsync();
 
         Assert.NotEmpty(collections);
-        Assert.Equal("Sample JSONPlaceholder API", collections[0].Name);
+        Assert.Equal("User API", collections[0].Name);
         Assert.NotEmpty(collections[0].Requests);
     }
 

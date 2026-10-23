@@ -147,60 +147,34 @@ public class JsonFileCollectionRepository : ICollectionRepository
 
     private static List<ApiCollection> CreateSeedCollections()
     {
-        var sampleCollection = new ApiCollection
+        // 1. User API
+        var userCol = new ApiCollection
         {
-            Name = "Sample JSONPlaceholder API",
-            Description = "Getting started sample API collection with pre-configured requests and assertions"
+            Name = "User API",
+            Description = "User profile and authentication services"
         };
-
-        // 1. GET All Posts
-        var getPosts = new ApiRequest
+        var getUser = new ApiRequest
         {
-            Name = "Get All Posts",
-            Description = "Fetches a list of 100 sample posts",
+            Name = "/users",
+            Description = "Fetches active user list and profiles",
             Method = HttpMethodType.GET,
-            Url = "https://jsonplaceholder.typicode.com/posts",
+            Url = "https://api.example.com/v1/users/active",
             Headers = [new KeyValuePairItem("Accept", "application/json")]
         };
-        getPosts.Assertions.Add(new AssertionRule
+        getUser.Assertions.Add(new AssertionRule
         {
             Target = AssertionTarget.StatusCode,
             Operator = AssertionOperator.Equals,
             ExpectedValue = "200"
         });
-        sampleCollection.Requests.Add(getPosts);
+        userCol.Requests.Add(getUser);
 
-        // 2. GET Single Post
-        var getPost = new ApiRequest
+        var registerUser = new ApiRequest
         {
-            Name = "Get Post by ID",
-            Description = "Fetches post with ID 1",
-            Method = HttpMethodType.GET,
-            Url = "https://jsonplaceholder.typicode.com/posts/1",
-            Headers = [new KeyValuePairItem("Accept", "application/json")]
-        };
-        getPost.Assertions.Add(new AssertionRule
-        {
-            Target = AssertionTarget.StatusCode,
-            Operator = AssertionOperator.Equals,
-            ExpectedValue = "200"
-        });
-        getPost.Assertions.Add(new AssertionRule
-        {
-            Target = AssertionTarget.JsonPath,
-            PropertyName = "id",
-            Operator = AssertionOperator.Equals,
-            ExpectedValue = "1"
-        });
-        sampleCollection.Requests.Add(getPost);
-
-        // 3. POST Create Post
-        var createPost = new ApiRequest
-        {
-            Name = "Create New Post",
-            Description = "Creates a new resource with a JSON payload",
+            Name = "/users/register",
+            Description = "Registers a new user account",
             Method = HttpMethodType.POST,
-            Url = "https://jsonplaceholder.typicode.com/posts",
+            Url = "https://api.example.com/v1/users/register",
             Headers = 
             [
                 new KeyValuePairItem("Content-Type", "application/json"),
@@ -209,39 +183,78 @@ public class JsonFileCollectionRepository : ICollectionRepository
             Body = new RequestBodySettings
             {
                 Type = BodyType.Json,
-                RawContent = "{\n  \"title\": \"Modern API Testing\",\n  \"body\": \"High performance desktop API client\",\n  \"userId\": 1\n}"
+                RawContent = "{\n  \"username\": \"alice_johnson\",\n  \"email\": \"alice.j@example.com\",\n  \"role\": \"admin\"\n}"
             }
         };
-        createPost.Assertions.Add(new AssertionRule
+        registerUser.Assertions.Add(new AssertionRule
         {
             Target = AssertionTarget.StatusCode,
             Operator = AssertionOperator.Equals,
             ExpectedValue = "201"
         });
-        sampleCollection.Requests.Add(createPost);
+        userCol.Requests.Add(registerUser);
 
-        // 4. Folder: Users & Comments
-        var folder = new RequestFolder
+        // 2. Product Catalog
+        var productCol = new ApiCollection
         {
-            Name = "Users & Comments",
-            Description = "Nested requests folder"
+            Name = "Product Catalog",
+            Description = "Product catalog and inventory queries"
         };
-        var getComments = new ApiRequest
+        var getProducts = new ApiRequest
         {
-            Name = "Get Comments for Post 1",
+            Name = "/products",
+            Description = "List all active catalog products",
             Method = HttpMethodType.GET,
-            Url = "https://jsonplaceholder.typicode.com/comments",
-            QueryParams = [new KeyValuePairItem("postId", "1")]
+            Url = "https://api.example.com/v1/products"
         };
-        getComments.Assertions.Add(new AssertionRule
-        {
-            Target = AssertionTarget.StatusCode,
-            Operator = AssertionOperator.Equals,
-            ExpectedValue = "200"
-        });
-        folder.Requests.Add(getComments);
-        sampleCollection.Folders.Add(folder);
+        productCol.Requests.Add(getProducts);
 
-        return [sampleCollection];
+        var getProductById = new ApiRequest
+        {
+            Name = "/products/{id}",
+            Description = "Get single product by item ID",
+            Method = HttpMethodType.GET,
+            Url = "https://api.example.com/v1/products/{id}",
+            QueryParams = [new KeyValuePairItem("id", "101")]
+        };
+        productCol.Requests.Add(getProductById);
+
+        // 3. Order Management
+        var orderCol = new ApiCollection
+        {
+            Name = "Order Management",
+            Description = "Customer order processing and cart checkout"
+        };
+        var updateCart = new ApiRequest
+        {
+            Name = "Update Cart",
+            Method = HttpMethodType.PUT,
+            Url = "https://api.example.com/v1/cart"
+        };
+        orderCol.Requests.Add(updateCart);
+
+        var deleteOrder = new ApiRequest
+        {
+            Name = "Delete Order",
+            Method = HttpMethodType.DELETE,
+            Url = "https://api.example.com/v1/orders/402"
+        };
+        orderCol.Requests.Add(deleteOrder);
+
+        // 4. Authentication
+        var authCol = new ApiCollection
+        {
+            Name = "Authentication",
+            Description = "OAuth2 and API authentication tokens"
+        };
+        var loginReq = new ApiRequest
+        {
+            Name = "/auth/login",
+            Method = HttpMethodType.POST,
+            Url = "https://api.example.com/v1/auth/login"
+        };
+        authCol.Requests.Add(loginReq);
+
+        return [userCol, productCol, orderCol, authCol];
     }
 }

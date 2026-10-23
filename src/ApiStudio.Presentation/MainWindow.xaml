@@ -8,12 +8,20 @@
         xmlns:enums="clr-namespace:ApiStudio.Domain.Enums;assembly=ApiStudio.Domain"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="ApiStudio - Modern API Testing" 
-        Height="820" Width="1240"
-        MinHeight="620" MinWidth="960"
+        Title="ApiStudio - v2.4.1" 
+        Height="840" Width="1280"
+        MinHeight="640" MinWidth="980"
         WindowStartupLocation="CenterScreen"
         Icon="Resources/app_icon.png"
         Background="{DynamicResource WindowBackgroundBrush}">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40" 
+                      CornerRadius="14" 
+                      GlassFrameThickness="0" 
+                      ResizeBorderThickness="6" 
+                      UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
 
     <Window.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVis"/>
@@ -22,6 +30,49 @@
         <conv:StatusToBrushConverter x:Key="StatusBrushConv"/>
         <conv:StringNullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVis"/>
         <conv:BytesToStringConverter x:Key="BytesConv"/>
+
+        <Style x:Key="WindowCaptionButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryTextBrush}"/>
+            <Setter Property="Width" Value="38"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#25FFFFFF"/>
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WindowCloseButton" TargetType="Button" BasedOn="{StaticResource WindowCaptionButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6" SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#E81123"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <ObjectDataProvider x:Key="HttpMethods" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
@@ -69,142 +120,186 @@
 
     <!-- Main Outer Container with Ambient Glass Lighting Orbs -->
     <Grid>
-        <!-- Ambient Glass Light Glows in Background (dynamic glowing orbs visible through transparent panels) -->
+        <!-- Ambient Glass Light Glows in Background (glowing neon cyan and cobalt orbs visible through transparent panels) -->
         <Canvas IsHitTestVisible="False">
-            <!-- Top-Right Vibrant Neon Accent Glow -->
-            <Ellipse Width="550" Height="550" Canvas.Right="-80" Canvas.Top="-100" Fill="{DynamicResource AmbientGlow1Brush}"/>
-
-            <!-- Bottom-Left Deep Cobalt / Navy Glow -->
-            <Ellipse Width="650" Height="650" Canvas.Left="-120" Canvas.Bottom="-150" Fill="{DynamicResource AmbientGlow2Brush}"/>
-
-            <!-- Center-Right Ambient Glow -->
-            <Ellipse Width="450" Height="450" Canvas.Right="120" Canvas.Bottom="-80" Fill="{DynamicResource AmbientGlow3Brush}"/>
+            <Ellipse Width="650" Height="650" Canvas.Right="-80" Canvas.Top="-120" Fill="{DynamicResource AmbientGlow1Brush}"/>
+            <Ellipse Width="750" Height="750" Canvas.Left="-140" Canvas.Bottom="-160" Fill="{DynamicResource AmbientGlow2Brush}"/>
+            <Ellipse Width="500" Height="500" Canvas.Right="120" Canvas.Bottom="-90" Fill="{DynamicResource AmbientGlow3Brush}"/>
         </Canvas>
 
         <!-- Main Structure -->
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="56"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- FROSTED GLASS HEADER BAR -->
-            <Border Grid.Row="0" Margin="14,10,14,0" 
-                    Background="{DynamicResource GlassPanelGradient}" 
-                    BorderBrush="{DynamicResource GlassBorderGradient}" 
-                    BorderThickness="1" 
-                    CornerRadius="12" 
-                    Padding="16,0"
-                    Effect="{DynamicResource GlassSubtleShadow}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Brand Identity -->
-                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <!-- Glass Logo Squircle with App Icon -->
-                        <Border CornerRadius="8" Margin="0,0,10,0" Width="30" Height="30" Effect="{StaticResource ButtonGlowBlue}" Background="{StaticResource PrimaryBlueBrush}">
-                            <Border.Clip>
-                                <RectangleGeometry RadiusX="8" RadiusY="8" Rect="0,0,30,30"/>
-                            </Border.Clip>
-                            <Image Source="Resources/app_icon.png" RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill"/>
-                        </Border>
-                        <TextBlock Text="ApiStudio" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}" VerticalAlignment="Center"/>
-                        <Border Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" CornerRadius="6" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
-                            <TextBlock Text="PRO" FontSize="10" FontWeight="Bold" Foreground="{StaticResource PrimaryBlueBrush}"/>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- Center Environment Selector Pill -->
-                    <Border Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                            Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" 
-                            BorderThickness="1" CornerRadius="8" Padding="8,4">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="{StaticResource IconEnvironment}" Fill="{DynamicResource SecondaryTextBrush}" 
-                                  Width="15" Height="15" Stretch="Uniform" Margin="0,0,8,0"/>
-                            <TextBlock Text="Environment:" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="Medium"/>
-                            <ComboBox ItemsSource="{Binding Environments}" SelectedItem="{Binding SelectedEnvironment}" 
-                                      DisplayMemberPath="Name" Width="150" Height="28" VerticalContentAlignment="Center"/>
-                            <Button Content="Manage" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,2" Margin="8,0,0,0" Click="ManageEnvironments_Click"/>
-                        </StackPanel>
-                    </Border>
-
-                    <!-- Right Quick Actions -->
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                        <Button Content="cURL Import" Style="{StaticResource SecondaryButton}" Height="32" Margin="0,0,8,0" Command="{Binding ImportCurlCommand}"/>
-                        <Button Content="Run Tests" Style="{StaticResource SecondaryButton}" Height="32" Margin="0,0,8,0" Command="{Binding OpenRunnerCommand}"/>
-                        <Button Style="{StaticResource IconButton}" Height="34" Width="34" ToolTip="Settings &amp; Theme" Command="{Binding OpenSettingsCommand}">
-                            <Path Data="{StaticResource IconSettings}" Fill="{DynamicResource SecondaryTextBrush}" Width="16" Height="16" Stretch="Uniform"/>
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <!-- MAIN WORKSPACE -->
-            <Grid Grid.Row="1" Margin="14,10,14,14">
+            <!-- 1. TOP INTEGRATED WINDOW BAR (preview.png match) -->
+            <Grid Grid.Row="0" Margin="16,6,16,2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="290" MinWidth="200" MaxWidth="500"/>
-                    <ColumnDefinition Width="6"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/> <!-- Brand: Icon + ApiStudio - v2.4.1 -->
+                    <ColumnDefinition Width="*"/>    <!-- Center Title / Draggable Area -->
+                    <ColumnDefinition Width="Auto"/> <!-- Quick Actions & Window Controls -->
                 </Grid.ColumnDefinitions>
 
-                <!-- LEFT SIDEBAR: FLOATING FROSTED GLASS CARD -->
-                <Border Grid.Column="0" 
+                <!-- Brand: Squircle App Icon + ApiStudio - v2.4.1 -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border CornerRadius="8" Margin="0,0,10,0" Width="24" Height="24" Effect="{DynamicResource ButtonGlowBlue}">
+                        <Border.Clip>
+                            <RectangleGeometry RadiusX="8" RadiusY="8" Rect="0,0,24,24"/>
+                        </Border.Clip>
+                        <Image Source="Resources/app_icon.png" RenderOptions.BitmapScalingMode="HighQuality" Stretch="UniformToFill"/>
+                    </Border>
+                    <TextBlock Text="ApiStudio" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text=" - v2.4.1" FontSize="13" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="2,0,0,0"/>
+                </StackPanel>
+
+                <!-- Center Drag Area -->
+                <Grid Grid.Column="1" Background="Transparent"/>
+
+                <!-- Right Quick Actions & Window Caption Buttons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="cURL Import" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,0" Margin="0,0,6,0" Command="{Binding ImportCurlCommand}" WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <Button Content="Run Tests" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,0" Margin="0,0,8,0" Command="{Binding OpenRunnerCommand}" WindowChrome.IsHitTestVisibleInChrome="True"/>
+                    <Button Style="{StaticResource IconButton}" Height="28" Width="28" Margin="0,0,10,0" ToolTip="Settings &amp; Theme" Command="{Binding OpenSettingsCommand}" WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Path Data="{StaticResource IconSettings}" Fill="{DynamicResource SecondaryTextBrush}" Width="14" Height="14" Stretch="Uniform"/>
+                    </Button>
+
+                    <Button Style="{StaticResource WindowCaptionButton}" Click="Minimize_Click" ToolTip="Minimize">
+                        <Path Data="M 0,5 L 10,5" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2" Width="10" Height="10"/>
+                    </Button>
+                    <Button Style="{StaticResource WindowCaptionButton}" Click="Maximize_Click" ToolTip="Maximize / Restore">
+                        <Path Data="M 0,0 L 10,0 L 10,10 L 0,10 Z" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2" Fill="Transparent" Width="10" Height="10"/>
+                    </Button>
+                    <Button Style="{StaticResource WindowCloseButton}" Click="Close_Click" ToolTip="Close">
+                        <Path Data="M 0,0 L 10,10 M 10,0 L 0,10" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2" Width="10" Height="10"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- 2. MAIN WORKSPACE WITH ACTIVITY RAIL, TWO-CARD SIDEBAR, AND EDITOR -->
+            <Grid Grid.Row="1" Margin="14,6,14,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48"/>  <!-- Left Activity Rail -->
+                    <ColumnDefinition Width="280" MinWidth="220" MaxWidth="450"/> <!-- Sidebar (Collections + History) -->
+                    <ColumnDefinition Width="8"/>   <!-- Splitter -->
+                    <ColumnDefinition Width="*"/>   <!-- Right Editor Workspace -->
+                </Grid.ColumnDefinitions>
+
+                <!-- LEFT ACTIVITY RAIL -->
+                <Border Grid.Column="0" Margin="0,0,8,0" 
                         Background="{DynamicResource GlassPanelGradient}" 
                         BorderBrush="{DynamicResource GlassBorderGradient}" 
                         BorderThickness="1" 
-                        CornerRadius="14" 
+                        CornerRadius="12" 
+                        Padding="0,12"
                         Effect="{DynamicResource GlassCardShadow}">
-                    <Grid Margin="12">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                    <Grid>
+                        <!-- Top Navigation Items -->
+                        <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <!-- Menu Button -->
+                            <Button Style="{StaticResource IconButton}" Width="34" Height="34" Margin="0,0,0,10" ToolTip="Menu">
+                                <Path Data="{StaticResource IconMenu}" Fill="{DynamicResource SecondaryTextBrush}" Width="15" Height="15" Stretch="Uniform"/>
+                            </Button>
 
-                        <!-- Segmented Navigation Pill Tabs -->
-                        <Border Grid.Row="0" Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" CornerRadius="10" Padding="3" Margin="0,0,0,12">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <RadioButton Grid.Column="0" Content="Collections" 
-                                             IsChecked="{Binding SelectedSidebarTab, Converter={StaticResource IntToBool}, ConverterParameter=0}"
-                                             Style="{StaticResource SegmentedGlassRadio}"/>
-                                <RadioButton Grid.Column="1" Content="History" 
-                                             IsChecked="{Binding SelectedSidebarTab, Converter={StaticResource IntToBool}, ConverterParameter=1}"
-                                             Style="{StaticResource SegmentedGlassRadio}"/>
+                            <!-- Collections (Active Pill) -->
+                            <Border Background="#1A00D2FF" BorderBrush="#00D2FF" BorderThickness="1" CornerRadius="8" Width="34" Height="34" Margin="0,0,0,10">
+                                <Button Style="{StaticResource IconButton}" Width="32" Height="32" ToolTip="API Collections">
+                                    <Path Data="{StaticResource IconGrid}" Fill="#00D2FF" Width="15" Height="15" Stretch="Uniform"/>
+                                </Button>
+                            </Border>
+
+                            <!-- Environments Button -->
+                            <Button Style="{StaticResource IconButton}" Width="34" Height="34" Margin="0,0,0,10" ToolTip="Manage Environments" Click="ManageEnvironments_Click">
+                                <Path Data="{StaticResource IconEnvironment}" Fill="{DynamicResource SecondaryTextBrush}" Width="15" Height="15" Stretch="Uniform"/>
+                            </Button>
+
+                            <!-- Runner Button -->
+                            <Button Style="{StaticResource IconButton}" Width="34" Height="34" Margin="0,0,0,10" ToolTip="Batch Collection Runner" Command="{Binding OpenRunnerCommand}">
+                                <Path Data="{StaticResource IconPlay}" Fill="{DynamicResource SecondaryTextBrush}" Width="14" Height="14" Stretch="Uniform"/>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Bottom Rail Tools -->
+                        <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                            <!-- History Icon -->
+                            <Button Style="{StaticResource IconButton}" Width="34" Height="34" Margin="0,0,0,8" ToolTip="History">
+                                <Path Data="{StaticResource IconHistory}" Fill="{DynamicResource SecondaryTextBrush}" Width="15" Height="15" Stretch="Uniform"/>
+                            </Button>
+
+                            <!-- Notifications Bell -->
+                            <Button Style="{StaticResource IconButton}" Width="34" Height="34" Margin="0,0,0,8" ToolTip="Notifications">
+                                <Path Data="{StaticResource IconBell}" Fill="{DynamicResource SecondaryTextBrush}" Width="15" Height="15" Stretch="Uniform"/>
+                            </Button>
+
+                            <!-- Settings Gear -->
+                            <Button Style="{StaticResource IconButton}" Width="34" Height="34" ToolTip="Settings &amp; Theme" Command="{Binding OpenSettingsCommand}">
+                                <Path Data="{StaticResource IconSettings}" Fill="{DynamicResource SecondaryTextBrush}" Width="15" Height="15" Stretch="Uniform"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- SIDEBAR: TWO DISTINCT FROSTED GLASS CARDS (Collections + History) -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*" MinHeight="180"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="2*" MinHeight="130"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- CARD A: API Collections -->
+                    <Border Grid.Row="0" 
+                            Background="{DynamicResource GlassPanelGradient}" 
+                            BorderBrush="{DynamicResource GlassBorderGradient}" 
+                            BorderThickness="1" 
+                            CornerRadius="12" 
+                            Padding="12,10"
+                            Effect="{DynamicResource GlassCardShadow}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Card Header -->
+                            <Grid Grid.Row="0" Margin="0,0,0,8">
+                                <TextBlock Text="API Collections" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Style="{StaticResource IconButton}" Width="26" Height="26" ToolTip="Add Collection" Command="{Binding AddCollectionCommand}">
+                                        <Path Data="{StaticResource IconAdd}" Fill="{DynamicResource SecondaryTextBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                                    </Button>
+                                    <Button Style="{StaticResource IconButton}" Width="26" Height="26" ToolTip="Import Collection" Command="{Binding ImportCollectionCommand}" Margin="2,0,0,0">
+                                        <Path Data="{StaticResource IconImport}" Fill="{DynamicResource SecondaryTextBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                                    </Button>
+                                    <Button Style="{StaticResource IconButton}" Width="26" Height="26" ToolTip="More Options" Margin="2,0,0,0">
+                                        <Path Data="{StaticResource IconMore}" Fill="{DynamicResource SecondaryTextBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                                    </Button>
+                                </StackPanel>
                             </Grid>
-                        </Border>
 
-                        <!-- Search Filter Box with Glass Input -->
-                        <Border Grid.Row="1" Margin="0,0,0,10">
-                            <Grid>
-                                <TextBox Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" 
-                                         Padding="28,7,10,7" VerticalContentAlignment="Center"/>
-                                <Path Data="{StaticResource IconSearch}" Fill="{DynamicResource SecondaryTextBrush}" 
-                                      Width="13" Height="13" Stretch="Uniform" HorizontalAlignment="Left" Margin="10,0,0,0" IsHitTestVisible="False"/>
-                            </Grid>
-                        </Border>
+                            <!-- Search Filter Input -->
+                            <Border Grid.Row="1" Margin="0,0,0,8">
+                                <Grid>
+                                    <TextBox Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" 
+                                             Padding="26,6,8,6" VerticalContentAlignment="Center" FontSize="12"/>
+                                    <Path Data="{StaticResource IconSearch}" Fill="{DynamicResource SecondaryTextBrush}" 
+                                          Width="12" Height="12" Stretch="Uniform" HorizontalAlignment="Left" Margin="8,0,0,0" IsHitTestVisible="False"/>
+                                </Grid>
+                            </Border>
 
-                        <!-- Content 1: Collections Tree View -->
-                        <Grid Grid.Row="2" Visibility="{Binding SelectedSidebarTab, Converter={StaticResource IntToVis}, ConverterParameter=0}">
-                            <TreeView ItemsSource="{Binding CollectionNodes}" BorderThickness="0" Background="Transparent" Padding="2">
+                            <!-- Collections Tree -->
+                            <TreeView Grid.Row="2" ItemsSource="{Binding CollectionNodes}" BorderThickness="0" Background="Transparent" Padding="0">
                                 <TreeView.ItemTemplate>
                                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                        <StackPanel Orientation="Horizontal" Margin="2,4">
-                                            <!-- Method Pill Badge -->
+                                        <StackPanel Orientation="Horizontal" Margin="2,3">
                                             <Border Visibility="{Binding Method, Converter={StaticResource NullOrEmptyToVis}}" 
                                                     Background="{Binding Method, Converter={StaticResource MethodBrushConv}}" 
-                                                    CornerRadius="4" Padding="5,2" Margin="0,0,8,0">
+                                                    CornerRadius="4" Padding="5,1" Margin="0,0,6,0">
                                                 <TextBlock Text="{Binding Method}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10"/>
                                             </Border>
-                                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </HierarchicalDataTemplate>
                                 </TreeView.ItemTemplate>
@@ -217,73 +312,81 @@
                                 </TreeView.ItemContainerStyle>
                             </TreeView>
                         </Grid>
+                    </Border>
 
-                        <!-- Content 2: History List View -->
-                        <Grid Grid.Row="2" Visibility="{Binding SelectedSidebarTab, Converter={StaticResource IntToVis}, ConverterParameter=1}">
-                            <ListView ItemsSource="{Binding HistoryItems}" BorderThickness="0" Background="Transparent" 
+                    <!-- Splitter between Cards -->
+                    <GridSplitter Grid.Row="1" Height="8" HorizontalAlignment="Stretch" Background="Transparent" Cursor="SizeNS"/>
+
+                    <!-- CARD B: Request History -->
+                    <Border Grid.Row="2" 
+                            Background="{DynamicResource GlassPanelGradient}" 
+                            BorderBrush="{DynamicResource GlassBorderGradient}" 
+                            BorderThickness="1" 
+                            CornerRadius="12" 
+                            Padding="12,10"
+                            Effect="{DynamicResource GlassCardShadow}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Card Header -->
+                            <Grid Grid.Row="0" Margin="0,0,0,8">
+                                <TextBlock Text="Request History" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Style="{StaticResource IconButton}" Width="26" Height="26" ToolTip="Clear History" Command="{Binding ClearHistoryCommand}">
+                                        <Path Data="{StaticResource IconDelete}" Fill="{DynamicResource SecondaryTextBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                                    </Button>
+                                    <Button Style="{StaticResource IconButton}" Width="26" Height="26" ToolTip="More Options" Margin="2,0,0,0">
+                                        <Path Data="{StaticResource IconMore}" Fill="{DynamicResource SecondaryTextBrush}" Width="12" Height="12" Stretch="Uniform"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- History List -->
+                            <ListView Grid.Row="1" ItemsSource="{Binding HistoryItems}" BorderThickness="0" Background="Transparent" 
                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="8,8" Cursor="Hand" Background="Transparent">
+                                        <Border BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="6,6" Cursor="Hand" Background="Transparent">
                                             <Border.InputBindings>
                                                 <MouseBinding Gesture="LeftClick" Command="{Binding OpenCommand}"/>
                                             </Border.InputBindings>
                                             <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                    <RowDefinition Height="Auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid Grid.Row="0">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Border Background="{Binding Method, Converter={StaticResource MethodBrushConv}}" 
-                                                            CornerRadius="4" Padding="5,1" Margin="0,0,6,0">
-                                                        <TextBlock Text="{Binding Method}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10"/>
-                                                    </Border>
-                                                    <TextBlock Grid.Column="1" Text="{Binding Url}" Foreground="{DynamicResource PrimaryTextBrush}" 
-                                                               FontSize="12" TextTrimming="CharacterEllipsis"/>
-                                                    <TextBlock Grid.Column="2" Text="{Binding StatusCode}" FontWeight="Bold" FontSize="11"
-                                                               Foreground="{Binding StatusCode, Converter={StaticResource StatusBrushConv}}" Margin="4,0,0,0"/>
-                                                </Grid>
-                                                <TextBlock Grid.Row="1" Text="{Binding ExecutedAt, StringFormat='{}{0:HH:mm:ss} • {1} ms', TargetNullValue=''}" 
-                                                           Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11" Margin="0,4,0,0"/>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Background="{Binding Method, Converter={StaticResource MethodBrushConv}}" 
+                                                        CornerRadius="4" Padding="5,1" Margin="0,0,6,0" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Method}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10"/>
+                                                </Border>
+                                                <TextBlock Grid.Column="1" Text="{Binding Url}" Foreground="{DynamicResource PrimaryTextBrush}" 
+                                                           FontSize="12" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding StatusCode}" FontWeight="Bold" FontSize="11"
+                                                           Foreground="{Binding StatusCode, Converter={StaticResource StatusBrushConv}}" Margin="4,0,0,0" VerticalAlignment="Center"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
                         </Grid>
+                    </Border>
+                </Grid>
 
-                        <!-- Sidebar Footer Buttons -->
-                        <Border Grid.Row="3" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,1,0,0" Padding="0,10,0,0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" Content="+ Collection" Style="{StaticResource SecondaryButton}" 
-                                        Command="{Binding AddCollectionCommand}" Margin="0,0,4,0"/>
-                                <Button Grid.Column="1" Content="Import" Style="{StaticResource SecondaryButton}" 
-                                        Command="{Binding ImportCollectionCommand}" Margin="4,0,0,0"/>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </Border>
+                <!-- Vertical Splitter between Sidebar and Workspace -->
+                <GridSplitter Grid.Column="2" Width="8" HorizontalAlignment="Stretch" Background="Transparent" Cursor="SizeWE"/>
 
-                <!-- SPLITTER -->
-                <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" Background="Transparent" Cursor="SizeWE"/>
-
-                <!-- RIGHT WORKSPACE: TABS, REQUEST EDITOR & RESPONSE VIEWER -->
-                <Grid Grid.Column="2">
+                <!-- 3. RIGHT WORKSPACE: TABS, UNIFIED URL CAPSULE, CONFIG & RESPONSE -->
+                <Grid Grid.Column="3">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/> <!-- Document Tabs -->
+                        <RowDefinition Height="*"/>    <!-- Active Tab Workspace -->
                     </Grid.RowDefinitions>
 
-                    <!-- Document Tabs Bar (Floating Glass Tabs) -->
+                    <!-- Document Tabs Bar matching preview.png -->
                     <Grid Grid.Row="0" Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -303,23 +406,27 @@
                                         <Border Margin="0,0,6,0" Cursor="Hand" MouseLeftButtonUp="OnTabItemClick">
                                             <Border.Style>
                                                 <Style TargetType="Border">
-                                                    <Setter Property="Background" Value="{DynamicResource GlassSubtleBrush}" />
-                                                    <Setter Property="BorderBrush" Value="{DynamicResource GlassBorderGradient}" />
-                                                    <Setter Property="BorderThickness" Value="1" />
-                                                    <Setter Property="CornerRadius" Value="10" />
-                                                    <Setter Property="Padding" Value="12,6" />
-                                                    <Setter Property="Opacity" Value="0.85" />
+                                                    <Setter Property="Background" Value="#330F1A2D"/>
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource GlassBorderGradient}"/>
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                    <Setter Property="CornerRadius" Value="8"/>
+                                                    <Setter Property="Padding" Value="12,6"/>
+                                                    <Setter Property="Opacity" Value="0.82"/>
                                                     <Style.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Opacity" Value="1.0" />
-                                                            <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}" />
+                                                            <Setter Property="Opacity" Value="1.0"/>
+                                                            <Setter Property="Background" Value="{DynamicResource HoverBackgroundBrush}"/>
                                                         </Trigger>
                                                         <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                            <Setter Property="Background" Value="{DynamicResource GlassCardBrush}" />
-                                                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}" />
-                                                            <Setter Property="BorderThickness" Value="1.5" />
-                                                            <Setter Property="Opacity" Value="1.0" />
-                                                            <Setter Property="Effect" Value="{StaticResource ButtonGlowBlue}" />
+                                                            <Setter Property="Background" Value="#D9162444"/>
+                                                            <Setter Property="BorderBrush" Value="#00D2FF"/>
+                                                            <Setter Property="BorderThickness" Value="1.5"/>
+                                                            <Setter Property="Opacity" Value="1.0"/>
+                                                            <Setter Property="Effect">
+                                                                <Setter.Value>
+                                                                    <DropShadowEffect BlurRadius="14" Color="#00D2FF" Opacity="0.32" ShadowDepth="0"/>
+                                                                </Setter.Value>
+                                                            </Setter>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -330,11 +437,11 @@
                                                               CommandParameter="{Binding}"/>
                                             </Border.InputBindings>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" FontWeight="SemiBold" Margin="0,0,8,0"/>
                                                 <Border Background="{Binding MethodString, Converter={StaticResource MethodBrushConv}}" 
-                                                        CornerRadius="4" Padding="5,1" Margin="0,0,8,0">
+                                                        CornerRadius="4" Padding="5,1" Margin="0,0,6,0">
                                                     <TextBlock Text="{Binding MethodString}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="10"/>
                                                 </Border>
-                                                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" FontWeight="Medium" Margin="0,0,8,0"/>
                                                 <TextBlock Text="*" Foreground="{StaticResource ErrorBrush}" FontWeight="Bold" 
                                                            Visibility="{Binding IsDirty, Converter={StaticResource BoolToVis}}" Margin="0,0,6,0"/>
                                                 <Button Content="✕" Style="{StaticResource IconButton}" Padding="2" FontSize="10" 
@@ -347,62 +454,84 @@
                             </ItemsControl>
                         </ScrollViewer>
 
-                        <!-- Add Tab (+) Button -->
-                        <Button Grid.Column="1" Content="+" Style="{StaticResource SecondaryButton}" 
-                                Width="36" Height="34" FontSize="16" FontWeight="Bold" Padding="0"
-                                Command="{Binding NewTabCommand}" ToolTip="New Request (Ctrl+T)"/>
+                        <!-- Add Tab (+) & Split View icons -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Content="+" Style="{StaticResource SecondaryButton}" 
+                                    Width="32" Height="30" FontSize="15" FontWeight="Bold" Padding="0" Margin="0,0,6,0"
+                                    Command="{Binding NewTabCommand}" ToolTip="New Request (Ctrl+T)"/>
+                            <Button Style="{StaticResource IconButton}" Width="30" Height="30" ToolTip="Split View">
+                                <Path Data="{StaticResource IconSplit}" Fill="{DynamicResource SecondaryTextBrush}" Width="14" Height="14" Stretch="Uniform"/>
+                            </Button>
+                        </StackPanel>
                     </Grid>
 
-                    <!-- Active Tab Editor & Response Workspace -->
+                    <!-- Active Tab Workspace -->
                     <Grid Grid.Row="1" DataContext="{Binding SelectedTab}">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="6"/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/> <!-- Unified URL Capsule -->
+                            <RowDefinition Height="*"/>    <!-- Sub-tabs (Params, Headers, etc.) -->
+                            <RowDefinition Height="6"/>    <!-- Splitter -->
+                            <RowDefinition Height="*"/>    <!-- Response Card -->
                         </Grid.RowDefinitions>
 
-                        <!-- 1. FLOATING URL BAR GLASS CAPSULE -->
+                        <!-- 1. UNIFIED URL BAR GLASS CAPSULE (Exact match to preview.png) -->
                         <Border Grid.Row="0" 
                                 Background="{DynamicResource GlassPanelGradient}" 
                                 BorderBrush="{DynamicResource GlassBorderGradient}" 
                                 BorderThickness="1" 
                                 CornerRadius="12" 
-                                Padding="10" 
+                                Padding="8,6" 
                                 Margin="0,0,0,8"
                                 Effect="{DynamicResource GlassSubtleShadow}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="120"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="105"/>
-                                    <ColumnDefinition Width="85"/>
+                                    <ColumnDefinition Width="Auto"/> <!-- Globe Icon -->
+                                    <ColumnDefinition Width="*"/>    <!-- URL Box -->
+                                    <ColumnDefinition Width="Auto"/> <!-- Environment Pill -->
+                                    <ColumnDefinition Width="Auto"/> <!-- Method Pill -->
+                                    <ColumnDefinition Width="Auto"/> <!-- Send Button -->
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Method Selector -->
-                                <ComboBox Grid.Column="0" ItemsSource="{Binding Source={StaticResource HttpMethods}}" 
-                                          SelectedItem="{Binding Method}" Height="38" FontWeight="Bold" 
-                                          VerticalContentAlignment="Center" Margin="0,0,10,0"/>
+                                <!-- Globe Icon -->
+                                <Path Grid.Column="0" Data="{StaticResource IconGlobe}" Fill="{DynamicResource SecondaryTextBrush}" 
+                                      Width="16" Height="16" Stretch="Uniform" Margin="8,0,10,0" VerticalAlignment="Center"/>
 
                                 <!-- URL Input Box -->
                                 <TextBox Grid.Column="1" Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" 
-                                         Height="38" FontSize="14" VerticalContentAlignment="Center" Margin="0,0,10,0">
+                                         Background="Transparent" BorderThickness="0" Height="36" FontSize="13" 
+                                         VerticalContentAlignment="Center" Margin="0,0,8,0" Foreground="{DynamicResource PrimaryTextBrush}">
                                     <TextBox.InputBindings>
                                         <KeyBinding Key="Enter" Command="{Binding SendCommand}"/>
                                     </TextBox.InputBindings>
                                 </TextBox>
 
+                                <!-- Environment Selector Pill -->
+                                <Border Grid.Column="2" Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" 
+                                        BorderThickness="1" CornerRadius="8" Padding="6,2" Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <ComboBox ItemsSource="{Binding DataContext.Environments, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                              SelectedItem="{Binding DataContext.SelectedEnvironment, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                              DisplayMemberPath="Name" MinWidth="130" Height="28" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center"/>
+                                </Border>
+
+                                <!-- Method Selector Pill -->
+                                <Border Grid.Column="3" Background="{DynamicResource GlassSubtleBrush}" BorderBrush="{DynamicResource GlassBorderGradient}" 
+                                        BorderThickness="1" CornerRadius="8" Padding="6,2" Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <ComboBox ItemsSource="{Binding Source={StaticResource HttpMethods}}" 
+                                              SelectedItem="{Binding Method}" MinWidth="85" Height="28" FontWeight="Bold" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center"/>
+                                </Border>
+
                                 <!-- Send / Cancel Button -->
-                                <Grid Grid.Column="2" Margin="0,0,10,0">
-                                    <Button Style="{StaticResource PrimaryButton}" Height="38" 
+                                <Grid Grid.Column="4">
+                                    <Button Style="{StaticResource PrimaryButton}" Height="36" Padding="18,0" 
                                             Command="{Binding SendCommand}" 
                                             Visibility="{Binding IsRunning, Converter={StaticResource InverseBoolToVis}}">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                             <Path Data="{StaticResource IconSend}" Fill="#FFFFFF" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
                                             <TextBlock Text="Send" Foreground="#FFFFFF" FontWeight="Bold" FontSize="13"/>
+                                            <Path Data="{StaticResource IconFastForward}" Fill="#80FFFFFF" Width="10" Height="10" Stretch="Uniform" Margin="8,0,0,0"/>
                                         </StackPanel>
                                     </Button>
-                                    <Button Style="{StaticResource DangerButton}" Height="38" 
+                                    <Button Style="{StaticResource DangerButton}" Height="36" Padding="18,0" 
                                             Command="{Binding CancelCommand}" 
                                             Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}">
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -411,10 +540,6 @@
                                         </StackPanel>
                                     </Button>
                                 </Grid>
-
-                                <!-- Save Button -->
-                                <Button Grid.Column="3" Content="Save" Style="{StaticResource SecondaryButton}" Height="38" 
-                                        Command="{Binding SaveCommand}"/>
                             </Grid>
                         </Border>
 
@@ -428,223 +553,195 @@
                                 Effect="{DynamicResource GlassCardShadow}">
                             <TabControl Style="{StaticResource ModernTabControl}">
                                 <!-- PARAMS TAB -->
-                                <TabItem Header="Params">
-                                    <Grid Margin="0,10,0,0">
+                                <TabItem Header="Request parameters">
+                                    <Grid Margin="0,8,0,0">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="*"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <DataGrid Grid.Row="0" ItemsSource="{Binding QueryParams}" AutoGenerateColumns="False" 
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                                            <Button Content="+ Add Parameter" Style="{StaticResource SecondaryButton}" 
+                                                    Command="{Binding AddQueryParamCommand}"/>
+                                        </StackPanel>
+                                        <DataGrid Grid.Row="1" ItemsSource="{Binding QueryParams}" AutoGenerateColumns="False" 
                                                   CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                  BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
-                                                  Background="Transparent" RowHeaderWidth="0">
+                                                  BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
                                             <DataGrid.Columns>
-                                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
-                                                <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
+                                                <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
                                                 <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                                                <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
-                                                <DataGridTemplateColumn Width="45">
+                                                <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                                <DataGridTemplateColumn Width="50">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <Button Content="✕" Style="{StaticResource IconButton}" 
-                                                                    Command="{Binding DeleteCommand}" Foreground="{StaticResource ErrorBrush}"/>
+                                                            <Button Content="✕" Style="{StaticResource IconButton}" Command="{Binding DeleteCommand}"/>
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
                                             </DataGrid.Columns>
                                         </DataGrid>
-                                        <Button Grid.Row="1" Content="+ Add Parameter" Style="{StaticResource SecondaryButton}" 
-                                                Command="{Binding AddQueryParamCommand}" HorizontalAlignment="Left" Margin="0,8,0,0"/>
                                     </Grid>
                                 </TabItem>
 
                                 <!-- HEADERS TAB -->
                                 <TabItem Header="Headers">
-                                    <Grid Margin="0,10,0,0">
+                                    <Grid Margin="0,8,0,0">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="*"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <DataGrid Grid.Row="0" ItemsSource="{Binding Headers}" AutoGenerateColumns="False" 
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                                            <Button Content="+ Add Header" Style="{StaticResource SecondaryButton}" 
+                                                    Command="{Binding AddHeaderCommand}"/>
+                                        </StackPanel>
+                                        <DataGrid Grid.Row="1" ItemsSource="{Binding Headers}" AutoGenerateColumns="False" 
                                                   CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                  BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
-                                                  Background="Transparent" RowHeaderWidth="0">
+                                                  BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
                                             <DataGrid.Columns>
-                                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
-                                                <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
+                                                <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
                                                 <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
-                                                <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
-                                                <DataGridTemplateColumn Width="45">
+                                                <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                                <DataGridTemplateColumn Width="50">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <Button Content="✕" Style="{StaticResource IconButton}" 
-                                                                    Command="{Binding DeleteCommand}" Foreground="{StaticResource ErrorBrush}"/>
+                                                            <Button Content="✕" Style="{StaticResource IconButton}" Command="{Binding DeleteCommand}"/>
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
                                             </DataGrid.Columns>
                                         </DataGrid>
-                                        <Button Grid.Row="1" Content="+ Add Header" Style="{StaticResource SecondaryButton}" 
-                                                Command="{Binding AddHeaderCommand}" HorizontalAlignment="Left" Margin="0,8,0,0"/>
                                     </Grid>
                                 </TabItem>
 
-                                <!-- AUTHORIZATION TAB -->
+                                <!-- AUTH TAB -->
                                 <TabItem Header="Authorization">
-                                    <StackPanel Margin="0,14,0,0" MaxWidth="600" HorizontalAlignment="Left">
-                                        <TextBlock Text="Authorization Type" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                                        <ComboBox ItemsSource="{Binding Source={StaticResource AuthTypes}}" 
-                                                  SelectedItem="{Binding SelectedAuthType}" Width="250" HorizontalAlignment="Left" Margin="0,0,0,16"/>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="0,12,0,0" MaxWidth="600" HorizontalAlignment="Left">
+                                            <TextBlock Text="Authorization Type" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6"/>
+                                            <ComboBox ItemsSource="{Binding Source={StaticResource AuthTypes}}" 
+                                                      SelectedItem="{Binding SelectedAuthType}" Width="200" HorizontalAlignment="Left" Margin="0,0,0,16"/>
 
-                                        <!-- Bearer Token Fields -->
-                                        <StackPanel Visibility="{Binding SelectedAuthType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:AuthType.Bearer}}">
-                                            <TextBlock Text="Bearer Token" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                                            <TextBox Text="{Binding BearerToken, UpdateSourceTrigger=PropertyChanged}" Height="34"/>
-                                        </StackPanel>
+                                            <!-- Bearer Token -->
+                                            <StackPanel Visibility="{Binding SelectedAuthType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Bearer}">
+                                                <TextBlock Text="Bearer Token" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6"/>
+                                                <TextBox Text="{Binding BearerToken, UpdateSourceTrigger=PropertyChanged}" Height="34" VerticalContentAlignment="Center"/>
+                                            </StackPanel>
 
-                                        <!-- Basic Auth Fields -->
-                                        <StackPanel Visibility="{Binding SelectedAuthType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:AuthType.Basic}}">
-                                            <TextBlock Text="Username" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                                            <TextBox Text="{Binding BasicUsername, UpdateSourceTrigger=PropertyChanged}" Height="34" Margin="0,0,0,12"/>
-                                            <TextBlock Text="Password" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                                            <TextBox Text="{Binding BasicPassword, UpdateSourceTrigger=PropertyChanged}" Height="34"/>
-                                        </StackPanel>
+                                            <!-- Basic Auth -->
+                                            <StackPanel Visibility="{Binding SelectedAuthType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Basic}">
+                                                <TextBlock Text="Username" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6"/>
+                                                <TextBox Text="{Binding BasicUsername, UpdateSourceTrigger=PropertyChanged}" Height="34" VerticalContentAlignment="Center" Margin="0,0,0,12"/>
+                                                <TextBlock Text="Password" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6"/>
+                                                <TextBox Text="{Binding BasicPassword, UpdateSourceTrigger=PropertyChanged}" Height="34" VerticalContentAlignment="Center"/>
+                                            </StackPanel>
 
-                                        <!-- API Key Fields -->
-                                        <StackPanel Visibility="{Binding SelectedAuthType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:AuthType.ApiKey}}">
-                                            <TextBlock Text="Key Name" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                                            <TextBox Text="{Binding ApiKeyName, UpdateSourceTrigger=PropertyChanged}" Height="34" Margin="0,0,0,12"/>
-                                            <TextBlock Text="Key Value" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                                            <TextBox Text="{Binding ApiKeyValue, UpdateSourceTrigger=PropertyChanged}" Height="34" Margin="0,0,0,12"/>
-                                            <TextBlock Text="Add to" FontWeight="SemiBold" Margin="0,0,0,6"/>
-                                            <ComboBox ItemsSource="{Binding Source={StaticResource ApiKeyLocations}}" 
-                                                      SelectedItem="{Binding ApiKeyLocation}" Width="200" HorizontalAlignment="Left"/>
+                                            <!-- API Key -->
+                                            <StackPanel Visibility="{Binding SelectedAuthType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=ApiKey}">
+                                                <TextBlock Text="Key Name" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6"/>
+                                                <TextBox Text="{Binding ApiKeyName, UpdateSourceTrigger=PropertyChanged}" Height="34" VerticalContentAlignment="Center" Margin="0,0,0,12"/>
+                                                <TextBlock Text="Key Value" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6"/>
+                                                <TextBox Text="{Binding ApiKeyValue, UpdateSourceTrigger=PropertyChanged}" Height="34" VerticalContentAlignment="Center" Margin="0,0,0,12"/>
+                                                <TextBlock Text="Add To" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6"/>
+                                                <ComboBox ItemsSource="{Binding Source={StaticResource ApiKeyLocations}}" 
+                                                          SelectedItem="{Binding ApiKeyLocation}" Width="150" HorizontalAlignment="Left"/>
+                                            </StackPanel>
                                         </StackPanel>
-                                    </StackPanel>
+                                    </ScrollViewer>
                                 </TabItem>
 
                                 <!-- BODY TAB -->
                                 <TabItem Header="Body">
-                                    <Grid Margin="0,10,0,0">
+                                    <Grid Margin="0,8,0,0">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-
-                                        <!-- Body Type Selector -->
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                                            <TextBlock Text="Content Type:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource SecondaryTextBrush}"/>
+                                            <TextBlock Text="Body Type:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource SecondaryTextBrush}"/>
                                             <ComboBox ItemsSource="{Binding Source={StaticResource BodyTypes}}" 
-                                                      SelectedItem="{Binding SelectedBodyType}" Width="160" VerticalContentAlignment="Center"/>
+                                                      SelectedItem="{Binding SelectedBodyType}" Width="180"/>
                                             <Button Content="Format JSON" Style="{StaticResource SecondaryButton}" 
                                                     Command="{Binding FormatJsonCommand}" Margin="12,0,0,0"
-                                                    Visibility="{Binding SelectedBodyType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:BodyType.Json}}"/>
+                                                    Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Raw}"/>
                                         </StackPanel>
 
-                                        <!-- Raw Body Editor (JSON, XML, Text) -->
-                                        <TextBox Grid.Row="1" Style="{StaticResource CodeTextBox}" 
-                                                 Text="{Binding RawBodyContent, UpdateSourceTrigger=PropertyChanged}"
-                                                 Visibility="{Binding SelectedBodyType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:BodyType.Json}}"/>
+                                        <!-- Raw Body Editor -->
+                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Raw}">
+                                            <TextBox Style="{StaticResource CodeTextBox}" 
+                                                     Text="{Binding RawBodyContent, UpdateSourceTrigger=PropertyChanged}"/>
+                                        </Grid>
 
-                                        <!-- Form-URL-Encoded DataGrid -->
-                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:BodyType.FormUrlEncoded}}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <DataGrid Grid.Row="0" ItemsSource="{Binding UrlEncodedParams}" AutoGenerateColumns="False" 
+                                        <!-- Form Data / URL Encoded Tables -->
+                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=FormData}">
+                                            <DataGrid ItemsSource="{Binding FormDataParams}" AutoGenerateColumns="False" 
                                                       CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
                                                       BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
                                                 <DataGrid.Columns>
-                                                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled}" Width="50"/>
-                                                    <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="200"/>
-                                                    <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*"/>
-                                                    <DataGridTemplateColumn Width="45">
+                                                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
+                                                    <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
+                                                    <DataGridTextColumn Header="Value" Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                                                    <DataGridTemplateColumn Width="50">
                                                         <DataGridTemplateColumn.CellTemplate>
                                                             <DataTemplate>
-                                                                <Button Content="✕" Style="{StaticResource IconButton}" Command="{Binding DeleteCommand}" Foreground="{StaticResource ErrorBrush}"/>
+                                                                <Button Content="✕" Style="{StaticResource IconButton}" Command="{Binding DeleteCommand}"/>
                                                             </DataTemplate>
                                                         </DataGridTemplateColumn.CellTemplate>
                                                     </DataGridTemplateColumn>
                                                 </DataGrid.Columns>
                                             </DataGrid>
-                                            <Button Grid.Row="1" Content="+ Add Field" Style="{StaticResource SecondaryButton}" 
-                                                    Command="{Binding AddUrlEncodedParamCommand}" HorizontalAlignment="Left" Margin="0,8,0,0"/>
                                         </Grid>
 
-                                        <!-- Multipart Form Data DataGrid -->
-                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:BodyType.MultipartFormData}}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <DataGrid Grid.Row="0" ItemsSource="{Binding FormDataParams}" AutoGenerateColumns="False" 
-                                                      CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
-                                                      BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
-                                                <DataGrid.Columns>
-                                                    <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled}" Width="50"/>
-                                                    <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="200"/>
-                                                    <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*"/>
-                                                    <DataGridTemplateColumn Width="45">
-                                                        <DataGridTemplateColumn.CellTemplate>
-                                                            <DataTemplate>
-                                                                <Button Content="✕" Style="{StaticResource IconButton}" Command="{Binding DeleteCommand}" Foreground="{StaticResource ErrorBrush}"/>
-                                                            </DataTemplate>
-                                                        </DataGridTemplateColumn.CellTemplate>
-                                                    </DataGridTemplateColumn>
-                                                </DataGrid.Columns>
-                                            </DataGrid>
-                                            <Button Grid.Row="1" Content="+ Add Form Field" Style="{StaticResource SecondaryButton}" 
-                                                    Command="{Binding AddFormDataParamCommand}" HorizontalAlignment="Left" Margin="0,8,0,0"/>
+                                        <!-- Binary File Picker -->
+                                        <Grid Grid.Row="1" Visibility="{Binding SelectedBodyType, Converter={StaticResource StringEqualsConverter}, ConverterParameter=Binary}">
+                                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <Button Content="Select File..." Style="{StaticResource SecondaryButton}" Command="{Binding SelectBinaryFileCommand}" Width="150" Height="36"/>
+                                                <TextBlock Text="{Binding BinaryFilePath, TargetNullValue='No file selected'}" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,10,0,0"/>
+                                            </StackPanel>
                                         </Grid>
-
-                                        <!-- Binary File Selector -->
-                                        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,16,0,0"
-                                                    Visibility="{Binding SelectedBodyType, Converter={StaticResource BoolToVis}, ConverterParameter={x:Static enums:BodyType.BinaryFile}}">
-                                            <Button Content="Select File..." Style="{StaticResource SecondaryButton}" Command="{Binding SelectFileCommand}" Margin="0,0,10,0"/>
-                                            <TextBlock Text="{Binding BinaryFilePath, TargetNullValue='No file selected'}" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
-                                        </StackPanel>
                                     </Grid>
                                 </TabItem>
 
-                                <!-- TESTS & ASSERTIONS TAB -->
+                                <!-- TESTS TAB -->
                                 <TabItem Header="Tests">
-                                    <Grid Margin="0,10,0,0">
+                                    <Grid Margin="0,8,0,0">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="*"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <DataGrid Grid.Row="0" ItemsSource="{Binding Assertions}" AutoGenerateColumns="False" 
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                                            <Button Content="+ Add Assertion" Style="{StaticResource SecondaryButton}" 
+                                                    Command="{Binding AddAssertionCommand}"/>
+                                        </StackPanel>
+                                        <DataGrid Grid.Row="1" ItemsSource="{Binding Assertions}" AutoGenerateColumns="False" 
                                                   CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
                                                   BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" Background="Transparent">
                                             <DataGrid.Columns>
-                                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled}" Width="50"/>
+                                                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
                                                 <DataGridComboBoxColumn Header="Target" SelectedItemBinding="{Binding Target}" 
-                                                                        ItemsSource="{Binding Source={StaticResource AssertionTargets}}" Width="150"/>
-                                                <DataGridTextColumn Header="Property / Path" Binding="{Binding PropertyName}" Width="150"/>
+                                                                        ItemsSource="{Binding Source={StaticResource AssertionTargets}}" Width="140"/>
+                                                <DataGridTextColumn Header="Property" Binding="{Binding PropertyName, UpdateSourceTrigger=PropertyChanged}" Width="140"/>
                                                 <DataGridComboBoxColumn Header="Operator" SelectedItemBinding="{Binding Operator}" 
                                                                         ItemsSource="{Binding Source={StaticResource AssertionOperators}}" Width="120"/>
-                                                <DataGridTextColumn Header="Expected Value" Binding="{Binding ExpectedValue}" Width="*"/>
-                                                <DataGridTemplateColumn Width="45">
+                                                <DataGridTextColumn Header="Expected Value" Binding="{Binding ExpectedValue, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                                                <DataGridTemplateColumn Width="50">
                                                     <DataGridTemplateColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <Button Content="✕" Style="{StaticResource IconButton}" Command="{Binding DeleteCommand}" Foreground="{StaticResource ErrorBrush}"/>
+                                                            <Button Content="✕" Style="{StaticResource IconButton}" Command="{Binding DeleteCommand}"/>
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
                                             </DataGrid.Columns>
                                         </DataGrid>
-                                        <Button Grid.Row="1" Content="+ Add Assertion" Style="{StaticResource SecondaryButton}" 
-                                                Command="{Binding AddAssertionCommand}" HorizontalAlignment="Left" Margin="0,8,0,0"/>
                                     </Grid>
                                 </TabItem>
                             </TabControl>
                         </Border>
 
-                        <!-- 3. SLICK GLASS SPLITTER WITH PILL HANDLE -->
+                        <!-- Splitter between Config and Response -->
                         <GridSplitter Grid.Row="2" Height="6" HorizontalAlignment="Stretch" Background="Transparent" Cursor="SizeNS"/>
 
-                        <!-- 4. RESPONSE VIEWER: FLOATING FROSTED GLASS CARD -->
+                        <!-- 3. RESPONSE VIEWER: FLOATING FROSTED GLASS CARD (exact match to preview.png) -->
                         <Border Grid.Row="3" 
                                 Background="{DynamicResource GlassPanelGradient}" 
                                 BorderBrush="{DynamicResource GlassBorderGradient}" 
@@ -658,7 +755,7 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
 
-                                <!-- Response Status Metrics & Action Bar -->
+                                <!-- Response Metrics Header Bar -->
                                 <Border Grid.Row="0" BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="0,0,0,10">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -667,114 +764,101 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <!-- Translucent Glowing Status Metrics Badges -->
-                                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                                            <!-- Glowing Status Pill -->
-                                            <Border Background="{StaticResource SuccessPillBgBrush}" 
-                                                    BorderBrush="{Binding StatusCode, Converter={StaticResource StatusBrushConv}}" 
-                                                    BorderThickness="1" 
-                                                    CornerRadius="8" 
-                                                    Padding="10,4" 
-                                                    Margin="0,0,10,0"
-                                                    Visibility="{Binding HasResponse, Converter={StaticResource BoolToVis}}">
-                                                <TextBlock FontWeight="Bold" FontSize="12" 
-                                                           Foreground="{Binding StatusCode, Converter={StaticResource StatusBrushConv}}">
-                                                    <Run Text="{Binding StatusCode, Mode=OneWay}"/>
-                                                    <Run Text=" "/>
-                                                    <Run Text="{Binding StatusDescription, Mode=OneWay}"/>
-                                                </TextBlock>
-                                            </Border>
+                                        <!-- Title "Response" -->
+                                        <TextBlock Grid.Column="0" Text="Response" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
 
-                                            <!-- Time Pill -->
-                                            <Border Background="{DynamicResource GlassSubtleBrush}" 
-                                                    BorderBrush="{DynamicResource GlassBorderGradient}" 
-                                                    BorderThickness="1" 
-                                                    CornerRadius="8" 
-                                                    Padding="8,4" 
-                                                    Margin="0,0,10,0"
-                                                    Visibility="{Binding HasResponse, Converter={StaticResource BoolToVis}}">
-                                                <TextBlock Text="{Binding ElapsedMilliseconds, StringFormat='{}{0} ms'}" 
-                                                           FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource PrimaryTextBrush}"/>
-                                            </Border>
+                                        <!-- Glowing Metrics Badges (Status Code, Response Time, Size) -->
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,16,0">
+                                            <!-- Status Code Pill -->
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0" Visibility="{Binding HasResponse, Converter={StaticResource BoolToVis}}">
+                                                <TextBlock Text="Status Code: " FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                                <Border Background="#1E10B981" BorderBrush="#10B981" BorderThickness="1" CornerRadius="6" Padding="8,3">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="8" Color="#10B981" Opacity="0.35" ShadowDepth="0"/>
+                                                    </Border.Effect>
+                                                    <TextBlock FontWeight="Bold" FontSize="11" Foreground="#10B981">
+                                                        <Run Text="{Binding StatusCode, Mode=OneWay}"/>
+                                                        <Run Text=" "/>
+                                                        <Run Text="{Binding StatusDescription, Mode=OneWay}"/>
+                                                    </TextBlock>
+                                                </Border>
+                                            </StackPanel>
+
+                                            <!-- Response Time Pill -->
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,14,0" Visibility="{Binding HasResponse, Converter={StaticResource BoolToVis}}">
+                                                <TextBlock Text="Response Time: " FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                                <Border Background="#1E00D2FF" BorderBrush="#00D2FF" BorderThickness="1" CornerRadius="6" Padding="8,3">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="8" Color="#00D2FF" Opacity="0.35" ShadowDepth="0"/>
+                                                    </Border.Effect>
+                                                    <TextBlock Text="{Binding ElapsedMilliseconds, StringFormat='{}{0} ms'}" 
+                                                               FontWeight="Bold" FontSize="11" Foreground="#00D2FF"/>
+                                                </Border>
+                                            </StackPanel>
 
                                             <!-- Size Pill -->
-                                            <Border Background="{DynamicResource GlassSubtleBrush}" 
-                                                    BorderBrush="{DynamicResource GlassBorderGradient}" 
-                                                    BorderThickness="1" 
-                                                    CornerRadius="8" 
-                                                    Padding="8,4"
-                                                    Visibility="{Binding HasResponse, Converter={StaticResource BoolToVis}}">
-                                                <TextBlock Text="{Binding ContentSizeBytes, Converter={StaticResource BytesConv}}" 
-                                                           FontWeight="SemiBold" FontSize="12" Foreground="{DynamicResource PrimaryTextBrush}"/>
-                                            </Border>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Visibility="{Binding HasResponse, Converter={StaticResource BoolToVis}}">
+                                                <TextBlock Text="Size: " FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                                <Border Background="#1E38BDF8" BorderBrush="#38BDF8" BorderThickness="1" CornerRadius="6" Padding="8,3">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect BlurRadius="8" Color="#38BDF8" Opacity="0.35" ShadowDepth="0"/>
+                                                    </Border.Effect>
+                                                    <TextBlock Text="{Binding ContentSizeBytes, Converter={StaticResource BytesConv}}" 
+                                                               FontWeight="Bold" FontSize="11" Foreground="#38BDF8"/>
+                                                </Border>
+                                            </StackPanel>
                                         </StackPanel>
 
-                                        <!-- Action Buttons -->
+                                        <!-- Actions (Copy, Save) -->
                                         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                            <Button Content="Copy" Style="{StaticResource SecondaryButton}" Height="30" 
-                                                    Command="{Binding CopyBodyCommand}" Margin="0,0,8,0"/>
-                                            <Button Content="Save to File" Style="{StaticResource SecondaryButton}" Height="30" 
-                                                    Command="{Binding SaveToFileCommand}"/>
+                                            <Button Content="Copy" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,0" Command="{Binding CopyBodyCommand}" Margin="0,0,6,0"/>
+                                            <Button Content="Save to File" Style="{StaticResource SecondaryButton}" Height="28" Padding="10,0" Command="{Binding SaveToFileCommand}"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
 
                                 <!-- Response Inspection Tabs -->
                                 <TabControl Grid.Row="1" Style="{StaticResource ModernTabControl}" Margin="0,6,0,0">
-                                    <!-- PRETTY BODY -->
+                                    <!-- PRETTY TAB -->
                                     <TabItem Header="Pretty">
                                         <TextBox Style="{StaticResource CodeTextBox}" Text="{Binding FormattedBody, Mode=OneWay}" 
                                                  IsReadOnly="True" Margin="0,6,0,0"/>
                                     </TabItem>
 
-                                    <!-- RAW BODY -->
+                                    <!-- RAW TAB -->
                                     <TabItem Header="Raw">
                                         <TextBox Style="{StaticResource CodeTextBox}" Text="{Binding Body, Mode=OneWay}" 
                                                  IsReadOnly="True" Margin="0,6,0,0"/>
                                     </TabItem>
 
-                                    <!-- HEADERS -->
+                                    <!-- HEADERS TAB -->
                                     <TabItem Header="Headers">
                                         <DataGrid ItemsSource="{Binding Headers}" AutoGenerateColumns="False" 
                                                   IsReadOnly="True" HeadersVisibility="Column" GridLinesVisibility="Horizontal" 
                                                   BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="1" 
                                                   Background="Transparent" Margin="0,6,0,0">
                                             <DataGrid.Columns>
-                                                <DataGridTextColumn Header="Header" Binding="{Binding Key}" Width="250" FontWeight="SemiBold"/>
+                                                <DataGridTextColumn Header="Key" Binding="{Binding Key}" Width="200"/>
                                                 <DataGridTextColumn Header="Value" Binding="{Binding Value}" Width="*"/>
                                             </DataGrid.Columns>
                                         </DataGrid>
                                     </TabItem>
 
-                                    <!-- COOKIES -->
-                                    <TabItem Header="Cookies">
-                                        <ListView ItemsSource="{Binding Cookies}" BorderThickness="1" 
-                                                  BorderBrush="{DynamicResource GlassBorderGradient}" Background="Transparent" Margin="0,6,0,0">
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding}" FontFamily="Cascadia Code, Consolas, monospace" Padding="4,6"/>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </TabItem>
-
-                                    <!-- TEST RESULTS -->
+                                    <!-- TEST RESULTS TAB -->
                                     <TabItem Header="Test Results">
-                                        <ListView ItemsSource="{Binding TestResults}" BorderThickness="1" 
-                                                  BorderBrush="{DynamicResource GlassBorderGradient}" Background="Transparent" Margin="0,6,0,0">
+                                        <ListView ItemsSource="{Binding TestResults}" BorderThickness="0" Background="Transparent" Margin="0,6,0,0">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <Border BorderBrush="{DynamicResource GlassBorderGradient}" BorderThickness="0,0,0,1" Padding="8,6">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="70"/>
+                                                                <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="*"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <Border Grid.Column="0" CornerRadius="6" Padding="6,2" HorizontalAlignment="Left"
-                                                                    Background="{Binding Passed, Converter={StaticResource BoolToVis}, ConverterParameter={StaticResource SuccessBrush}}">
-                                                                <TextBlock Text="PASSED" FontWeight="Bold" FontSize="11" Foreground="#FFFFFF"/>
+                                                            <Border Background="{Binding Passed, Converter={StaticResource StatusBrushConv}}" CornerRadius="4" Padding="6,2" Margin="0,0,10,0">
+                                                                <TextBlock Text="{Binding Passed, Converter={StaticResource StatusBrushConv}}" Foreground="#FFFFFF" FontWeight="Bold" FontSize="11"/>
                                                             </Border>
-                                                            <TextBlock Grid.Column="1" Text="{Binding Message}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding Message}" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
                                                         </Grid>
                                                     </Border>
                                                 </DataTemplate>

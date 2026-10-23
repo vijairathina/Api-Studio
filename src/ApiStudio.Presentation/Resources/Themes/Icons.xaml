@@ -23,5 +23,12 @@
     <Geometry x:Key="IconExport">M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z</Geometry>
     <Geometry x:Key="IconImport">M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z</Geometry>
     <Geometry x:Key="IconFormat">M3 21h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z</Geometry>
+    <Geometry x:Key="IconGlobe">M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z</Geometry>
+    <Geometry x:Key="IconMenu">M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z</Geometry>
+    <Geometry x:Key="IconGrid">M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z</Geometry>
+    <Geometry x:Key="IconBell">M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z</Geometry>
+    <Geometry x:Key="IconMore">M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z</Geometry>
+    <Geometry x:Key="IconSplit">M19 4H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 14H5V6h6v12zm8 0h-6V6h6v12z</Geometry>
+    <Geometry x:Key="IconFastForward">M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z</Geometry>
 
 </ResourceDictionary>
