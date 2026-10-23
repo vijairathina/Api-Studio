@@ -454,36 +454,68 @@ public class MainViewModel : ObservableObject
         if (isDark)
         {
             appResources["LightBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#0F172A"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#0B132B"));
             appResources["PanelBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#1E293B"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#131D3B"));
+            appResources["GlassCardBrush"] = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#E6131D3B"));
+            appResources["GlassSubtleBrush"] = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#B31C284D"));
             appResources["SubtleBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#334155"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#1E2C52"));
             appResources["HoverBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#293548"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#253664"));
             appResources["PrimaryTextBrush"] = new System.Windows.Media.SolidColorBrush(
                 (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F8FAFC"));
             appResources["SecondaryTextBrush"] = new System.Windows.Media.SolidColorBrush(
                 (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#94A3B8"));
             appResources["BorderBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#334155"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#263859"));
+
+            var darkPanelGrad = new System.Windows.Media.LinearGradientBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F0131E3D"),
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#D90E162E"),
+                new System.Windows.Point(0, 0), new System.Windows.Point(1, 1));
+            appResources["GlassPanelGradient"] = darkPanelGrad;
+
+            var darkBorderGrad = new System.Windows.Media.LinearGradientBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#4D38507A"),
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#261E2E4A"),
+                new System.Windows.Point(0, 0), new System.Windows.Point(1, 1));
+            appResources["GlassBorderGradient"] = darkBorderGrad;
         }
         else
         {
             appResources["LightBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F4F7FB"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#EDF3FA"));
             appResources["PanelBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
                 (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFFFFF"));
+            appResources["GlassCardBrush"] = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F2FFFFFF"));
+            appResources["GlassSubtleBrush"] = new System.Windows.Media.SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#A0EDF4FB"));
             appResources["SubtleBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#EBF1F8"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#E8F0FA"));
             appResources["HoverBackgroundBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#EDF2F7"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#E2ECF8"));
             appResources["PrimaryTextBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#172B4D"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#0F1D38"));
             appResources["SecondaryTextBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#667085"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#5A6A85"));
             appResources["BorderBrush"] = new System.Windows.Media.SolidColorBrush(
-                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#D9E2F0"));
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#D2DEF2"));
+
+            var lightPanelGrad = new System.Windows.Media.LinearGradientBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#F5FFFFFF"),
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#D6F0F6FC"),
+                new System.Windows.Point(0, 0), new System.Windows.Point(1, 1));
+            appResources["GlassPanelGradient"] = lightPanelGrad;
+
+            var lightBorderGrad = new System.Windows.Media.LinearGradientBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#B3FFFFFF"),
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#40D0E2F5"),
+                new System.Windows.Point(0, 0), new System.Windows.Point(1, 1));
+            appResources["GlassBorderGradient"] = lightBorderGrad;
         }
     }
 

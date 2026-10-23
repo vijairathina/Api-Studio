@@ -1,25 +1,32 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Brand Palette Colors -->
+    <!-- Core Brand Colors -->
     <Color x:Key="PrimaryBlueColor">#00338D</Color>
     <Color x:Key="SecondaryBlueColor">#005EB8</Color>
     <Color x:Key="AccentBlueColor">#00A3E0</Color>
     
-    <Color x:Key="LightBackgroundColor">#F4F7FB</Color>
+    <Color x:Key="LightBackgroundColor">#EDF3FA</Color>
     <Color x:Key="PanelBackgroundColor">#FFFFFF</Color>
-    <Color x:Key="SubtleBackgroundColor">#EBF1F8</Color>
-    <Color x:Key="HoverBackgroundColor">#EDF2F7</Color>
+    <Color x:Key="SubtleBackgroundColor">#E8F0FA</Color>
+    <Color x:Key="HoverBackgroundColor">#E2ECF8</Color>
 
-    <Color x:Key="PrimaryTextColor">#172B4D</Color>
-    <Color x:Key="SecondaryTextColor">#667085</Color>
-    <Color x:Key="BorderColor">#D9E2F0</Color>
+    <Color x:Key="PrimaryTextColor">#0F1D38</Color>
+    <Color x:Key="SecondaryTextColor">#5A6A85</Color>
+    <Color x:Key="BorderColor">#D2DEF2</Color>
 
     <Color x:Key="SuccessColor">#16803C</Color>
     <Color x:Key="WarningColor">#B7791F</Color>
     <Color x:Key="ErrorColor">#D92D20</Color>
 
-    <!-- Solid Color Brushes -->
+    <!-- Translucent Glassmorphism Colors -->
+    <Color x:Key="GlassSurfaceColor">#E6FFFFFF</Color>
+    <Color x:Key="GlassCardColor">#F2FFFFFF</Color>
+    <Color x:Key="GlassSubtleColor">#A0EDF4FB</Color>
+    <Color x:Key="GlassBorderColor">#66FFFFFF</Color>
+    <Color x:Key="GlassBorderDarkColor">#2E00338D</Color>
+
+    <!-- Solid & Glass Brushes -->
     <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlueColor}" />
     <SolidColorBrush x:Key="SecondaryBlueBrush" Color="{StaticResource SecondaryBlueColor}" />
     <SolidColorBrush x:Key="AccentBlueBrush" Color="{StaticResource AccentBlueColor}" />
@@ -37,6 +44,51 @@
     <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}" />
     <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}" />
 
+    <!-- Glass Specific Brushes -->
+    <SolidColorBrush x:Key="GlassSurfaceBrush" Color="{StaticResource GlassSurfaceColor}" />
+    <SolidColorBrush x:Key="GlassCardBrush" Color="{StaticResource GlassCardColor}" />
+    <SolidColorBrush x:Key="GlassSubtleBrush" Color="{StaticResource GlassSubtleColor}" />
+    <SolidColorBrush x:Key="GlassBorderBrush" Color="{StaticResource GlassBorderColor}" />
+    <SolidColorBrush x:Key="GlassBorderDarkBrush" Color="{StaticResource GlassBorderDarkColor}" />
+
+    <!-- Frosted Glass Linear Gradients -->
+    <LinearGradientBrush x:Key="GlassPanelGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#F5FFFFFF" Offset="0.0" />
+        <GradientStop Color="#D6F0F6FC" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GlassCardGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#FCFFFFFF" Offset="0.0" />
+        <GradientStop Color="#EDF5FBFF" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GlassBorderGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#B3FFFFFF" Offset="0.0" />
+        <GradientStop Color="#40D0E2F5" Offset="0.5" />
+        <GradientStop Color="#73FFFFFF" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GlassPrimaryButtonGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#004DA8" Offset="0.0" />
+        <GradientStop Color="#00338D" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GlassSendButtonHoverGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#0066CC" Offset="0.0" />
+        <GradientStop Color="#00439E" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GlassCancelButtonGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#E6392E" Offset="0.0" />
+        <GradientStop Color="#B42318" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <!-- Translucent Status Badges (Pills) -->
+    <SolidColorBrush x:Key="SuccessPillBgBrush" Color="#1E16803C" />
+    <SolidColorBrush x:Key="WarningPillBgBrush" Color="#1EB7791F" />
+    <SolidColorBrush x:Key="ErrorPillBgBrush" Color="#1ED92D20" />
+    <SolidColorBrush x:Key="InfoPillBgBrush" Color="#1E005EB8" />
+
     <!-- Method Badges -->
     <SolidColorBrush x:Key="GetMethodBrush" Color="#16803C" />
     <SolidColorBrush x:Key="PostMethodBrush" Color="#B7791F" />
@@ -44,5 +96,12 @@
     <SolidColorBrush x:Key="PatchMethodBrush" Color="#6B46C1" />
     <SolidColorBrush x:Key="DeleteMethodBrush" Color="#D92D20" />
     <SolidColorBrush x:Key="OtherMethodBrush" Color="#4A5568" />
+
+    <!-- Glass Effects -->
+    <DropShadowEffect x:Key="GlassCardShadow" BlurRadius="22" Direction="270" ShadowDepth="4" Color="#001838" Opacity="0.07"/>
+    <DropShadowEffect x:Key="GlassFloatingShadow" BlurRadius="30" Direction="270" ShadowDepth="8" Color="#001433" Opacity="0.10"/>
+    <DropShadowEffect x:Key="GlassSubtleShadow" BlurRadius="12" Direction="270" ShadowDepth="2" Color="#001433" Opacity="0.05"/>
+    <DropShadowEffect x:Key="GlassGlowBlue" BlurRadius="16" Direction="0" ShadowDepth="0" Color="#00A3E0" Opacity="0.35"/>
+    <DropShadowEffect x:Key="ButtonGlowBlue" BlurRadius="14" Direction="270" ShadowDepth="3" Color="#00338D" Opacity="0.28"/>
 
 </ResourceDictionary>

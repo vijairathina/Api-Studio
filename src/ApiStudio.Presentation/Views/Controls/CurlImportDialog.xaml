@@ -2,10 +2,16 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Import cURL Command - ApiStudio" 
-        Height="450" Width="650"
-        WindowStartupLocation="CenterOwner"
-        Background="{StaticResource LightBackgroundBrush}">
-    
+        Height="470" Width="680"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#F3F7FC" Offset="0.0" />
+            <GradientStop Color="#E5EDF7" Offset="1.0" />
+        </LinearGradientBrush>
+    </Window.Background>
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -14,31 +20,37 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,12">
-            <TextBlock Text="Import cURL" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource PrimaryTextBrush}"/>
-            <TextBlock Text="Paste your cURL command below to import the method, URL, headers, and request body." 
-                       Foreground="{StaticResource SecondaryTextBrush}" Margin="0,4,0,0"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,14">
+            <TextBlock Text="Import cURL Command" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryTextBrush}"/>
+            <TextBlock Text="Paste your cURL command below to automatically extract the HTTP method, endpoint URL, headers, and request payload." 
+                       Foreground="{StaticResource SecondaryTextBrush}" FontSize="13" Margin="0,4,0,0"/>
         </StackPanel>
 
-        <TextBox Grid.Row="1" 
-                 Style="{StaticResource CodeTextBox}"
-                 Text="{Binding CurlText, UpdateSourceTrigger=PropertyChanged}"
-                 TextWrapping="Wrap"
-                 AcceptsReturn="True"
-                 VerticalScrollBarVisibility="Auto"
-                 Padding="10"/>
+        <!-- Frosted Glass Code Editor Container -->
+        <Border Grid.Row="1" Background="{StaticResource GlassPanelGradient}" 
+                BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" 
+                CornerRadius="12" Padding="6" Effect="{StaticResource GlassCardShadow}">
+            <TextBox Style="{StaticResource CodeTextBox}"
+                     Text="{Binding CurlText, UpdateSourceTrigger=PropertyChanged}"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto"
+                     BorderThickness="0"
+                     Background="Transparent"/>
+        </Border>
 
-        <!-- Preview summary -->
-        <Border Grid.Row="2" Background="{StaticResource PanelBackgroundBrush}" 
-                BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" 
-                CornerRadius="4" Padding="12" Margin="0,12,0,16">
-            <TextBlock Text="{Binding PreviewSummary}" Foreground="{StaticResource PrimaryTextBrush}" TextWrapping="Wrap"/>
+        <!-- Glass Preview Summary Pill -->
+        <Border Grid.Row="2" Background="{StaticResource GlassSubtleBrush}" 
+                BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" 
+                CornerRadius="10" Padding="14,10" Margin="0,12,0,16">
+            <TextBlock Text="{Binding PreviewSummary}" Foreground="{StaticResource PrimaryTextBrush}" 
+                       FontSize="13" TextWrapping="Wrap" FontWeight="Medium"/>
         </Border>
 
         <!-- Action buttons -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Cancel" Style="{StaticResource SecondaryButton}" Width="90" Click="Cancel_Click" Margin="0,0,10,0"/>
-            <Button Content="Import Request" Style="{StaticResource PrimaryButton}" Width="130" Click="Import_Click"/>
+            <Button Content="Cancel" Style="{StaticResource SecondaryButton}" Width="95" Height="36" Click="Cancel_Click" Margin="0,0,10,0"/>
+            <Button Content="Import Request" Style="{StaticResource PrimaryButton}" Width="140" Height="36" Click="Import_Click"/>
         </StackPanel>
     </Grid>
 </Window>
