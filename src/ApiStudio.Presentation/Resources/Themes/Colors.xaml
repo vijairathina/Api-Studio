@@ -69,13 +69,13 @@
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="GlassPrimaryButtonGradient" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#004DA8" Offset="0.0" />
-        <GradientStop Color="#00338D" Offset="1.0" />
+        <GradientStop Color="#1A73E8" Offset="0.0" />
+        <GradientStop Color="#0052CC" Offset="1.0" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="GlassSendButtonHoverGradient" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Color="#0066CC" Offset="0.0" />
-        <GradientStop Color="#00439E" Offset="1.0" />
+        <GradientStop Color="#3385FF" Offset="0.0" />
+        <GradientStop Color="#1A66FF" Offset="1.0" />
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="GlassCancelButtonGradient" StartPoint="0,0" EndPoint="0,1">
@@ -102,6 +102,6 @@
     <DropShadowEffect x:Key="GlassFloatingShadow" BlurRadius="30" Direction="270" ShadowDepth="8" Color="#001433" Opacity="0.10"/>
     <DropShadowEffect x:Key="GlassSubtleShadow" BlurRadius="12" Direction="270" ShadowDepth="2" Color="#001433" Opacity="0.05"/>
     <DropShadowEffect x:Key="GlassGlowBlue" BlurRadius="16" Direction="0" ShadowDepth="0" Color="#00A3E0" Opacity="0.35"/>
-    <DropShadowEffect x:Key="ButtonGlowBlue" BlurRadius="14" Direction="270" ShadowDepth="3" Color="#00338D" Opacity="0.28"/>
+    <DropShadowEffect x:Key="ButtonGlowBlue" BlurRadius="16" Direction="270" ShadowDepth="3" Color="#0052CC" Opacity="0.45"/>
 
 </ResourceDictionary>

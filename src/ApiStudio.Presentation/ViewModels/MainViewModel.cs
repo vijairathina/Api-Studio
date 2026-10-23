@@ -65,7 +65,16 @@ public class MainViewModel : ObservableObject
     public int SelectedSidebarTab
     {
         get => _selectedSidebarTab;
-        set => SetProperty(ref _selectedSidebarTab, value);
+        set
+        {
+            if (SetProperty(ref _selectedSidebarTab, value))
+            {
+                if (value == 1)
+                {
+                    _ = RefreshHistoryAsync();
+                }
+            }
+        }
     }
 
     public string SearchFilter
@@ -104,6 +113,7 @@ public class MainViewModel : ObservableObject
     public ICommand ClearHistoryCommand { get; }
     public ICommand ToggleSidebarCommand { get; }
     public ICommand ToggleThemeCommand { get; }
+    public ICommand OpenSettingsCommand { get; }
 
     public MainViewModel(
         IHttpRequestExecutor requestExecutor,
@@ -139,6 +149,7 @@ public class MainViewModel : ObservableObject
         ClearHistoryCommand = new RelayCommand(ClearHistory);
         ToggleSidebarCommand = new RelayCommand(() => IsSidebarCollapsed = !IsSidebarCollapsed);
         ToggleThemeCommand = new RelayCommand(ToggleTheme);
+        OpenSettingsCommand = new RelayCommand(OpenSettings);
     }
 
     public async Task InitializeAsync()
@@ -197,7 +208,20 @@ public class MainViewModel : ObservableObject
             GetActiveVariables);
 
         tab.SaveRequested += OnTabSaveRequested;
+        tab.HistoryItemAdded += OnHistoryItemAdded;
         return tab;
+    }
+
+    private void OnHistoryItemAdded(RequestHistoryItem item)
+    {
+        System.Windows.Application.Current?.Dispatcher?.Invoke(() =>
+        {
+            var vm = new HistoryItemViewModel(item)
+            {
+                OpenCommand = new RelayCommand(() => OpenRequestInTab(item.RequestSnapshot))
+            };
+            HistoryItems.Insert(0, vm);
+        });
     }
 
     public void AddNewTab()
@@ -422,6 +446,29 @@ public class MainViewModel : ObservableObject
         };
 
         var win = new Views.Controls.CollectionRunnerWindow
+        {
+            DataContext = vm,
+            Owner = System.Windows.Application.Current.MainWindow
+        };
+
+        win.ShowDialog();
+    }
+
+    private void OpenSettings()
+    {
+        var vm = new SettingsViewModel(
+            _preferencesRepository,
+            _historyRepository,
+            applyTheme: isDark =>
+            {
+                IsDarkTheme = isDark;
+                ApplyTheme(isDark);
+            },
+            onHistoryCleared: () => HistoryItems.Clear(),
+            currentHistoryCount: HistoryItems.Count,
+            isCurrentDark: IsDarkTheme);
+
+        var win = new Views.Controls.SettingsWindow
         {
             DataContext = vm,
             Owner = System.Windows.Application.Current.MainWindow

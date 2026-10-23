@@ -276,8 +276,8 @@ public class RequestTabViewModel : ObservableObject
     public ICommand AddUrlEncodedParamCommand { get; }
     public ICommand AddFormDataParamCommand { get; }
     public ICommand AddAssertionCommand { get; }
-
     public event Action<RequestTabViewModel>? SaveRequested;
+    public event Action<RequestHistoryItem>? HistoryItemAdded;
 
     public RequestTabViewModel(
         IHttpRequestExecutor requestExecutor,
@@ -435,7 +435,7 @@ public class RequestTabViewModel : ObservableObject
             Response.LoadFromResponse(apiResponse);
 
             // Log to History
-            await _historyRepository.AddAsync(new RequestHistoryItem
+            var historyItem = new RequestHistoryItem
             {
                 ExecutedAt = DateTime.UtcNow,
                 Method = model.EffectiveMethod,
@@ -444,7 +444,9 @@ public class RequestTabViewModel : ObservableObject
                 StatusDescription = apiResponse.StatusDescription,
                 ElapsedMilliseconds = apiResponse.ElapsedMilliseconds,
                 RequestSnapshot = model
-            });
+            };
+            await _historyRepository.AddAsync(historyItem);
+            HistoryItemAdded?.Invoke(historyItem);
         }
         catch (Exception ex)
         {

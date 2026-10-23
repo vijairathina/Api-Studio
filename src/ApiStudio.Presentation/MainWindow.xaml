@@ -151,7 +151,7 @@
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                         <Button Content="cURL Import" Style="{StaticResource SecondaryButton}" Height="32" Margin="0,0,8,0" Command="{Binding ImportCurlCommand}"/>
                         <Button Content="Run Tests" Style="{StaticResource SecondaryButton}" Height="32" Margin="0,0,8,0" Command="{Binding OpenRunnerCommand}"/>
-                        <Button Style="{StaticResource IconButton}" Height="32" Width="32" ToolTip="Toggle Theme" Command="{Binding ToggleThemeCommand}">
+                        <Button Style="{StaticResource IconButton}" Height="34" Width="34" ToolTip="Settings &amp; Theme" Command="{Binding OpenSettingsCommand}">
                             <Path Data="{StaticResource IconSettings}" Fill="{StaticResource SecondaryTextBrush}" Width="16" Height="16" Stretch="Uniform"/>
                         </Button>
                     </StackPanel>
@@ -182,23 +182,18 @@
                         </Grid.RowDefinitions>
 
                         <!-- Segmented Navigation Pill Tabs -->
-                        <Border Grid.Row="0" Background="{StaticResource GlassSubtleBrush}" BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" CornerRadius="8" Padding="3" Margin="0,0,0,10">
+                        <Border Grid.Row="0" Background="{StaticResource GlassSubtleBrush}" BorderBrush="{StaticResource GlassBorderGradient}" BorderThickness="1" CornerRadius="10" Padding="3" Margin="0,0,0,12">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" Content="Collections" FontWeight="SemiBold" FontSize="12" Height="30"
-                                        Command="{Binding DataContext.NewTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        Style="{StaticResource IconButton}">
-                                    <Button.InputBindings>
-                                        <MouseBinding Gesture="LeftClick" Command="{Binding DataContext.NewTabCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                    </Button.InputBindings>
-                                </Button>
-                                <TabControl Grid.ColumnSpan="2" SelectedIndex="{Binding SelectedSidebarTab}" Style="{StaticResource ModernTabControl}" BorderThickness="0">
-                                    <TabItem Header="Collections" Padding="12,6"/>
-                                    <TabItem Header="History" Padding="12,6"/>
-                                </TabControl>
+                                <RadioButton Grid.Column="0" Content="Collections" 
+                                             IsChecked="{Binding SelectedSidebarTab, Converter={StaticResource IntToBool}, ConverterParameter=0}"
+                                             Style="{StaticResource SegmentedGlassRadio}"/>
+                                <RadioButton Grid.Column="1" Content="History" 
+                                             IsChecked="{Binding SelectedSidebarTab, Converter={StaticResource IntToBool}, ConverterParameter=1}"
+                                             Style="{StaticResource SegmentedGlassRadio}"/>
                             </Grid>
                         </Border>
 
@@ -213,7 +208,7 @@
                         </Border>
 
                         <!-- Content 1: Collections Tree View -->
-                        <Grid Grid.Row="2" Visibility="{Binding SelectedSidebarTab, Converter={StaticResource BoolToVis}, ConverterParameter=0}">
+                        <Grid Grid.Row="2" Visibility="{Binding SelectedSidebarTab, Converter={StaticResource IntToVis}, ConverterParameter=0}">
                             <TreeView ItemsSource="{Binding CollectionNodes}" BorderThickness="0" Background="Transparent" Padding="2">
                                 <TreeView.ItemTemplate>
                                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
@@ -239,7 +234,7 @@
                         </Grid>
 
                         <!-- Content 2: History List View -->
-                        <Grid Grid.Row="2" Visibility="{Binding SelectedSidebarTab, Converter={StaticResource BoolToVis}, ConverterParameter=1}">
+                        <Grid Grid.Row="2" Visibility="{Binding SelectedSidebarTab, Converter={StaticResource IntToVis}, ConverterParameter=1}">
                             <ListView ItemsSource="{Binding HistoryItems}" BorderThickness="0" Background="Transparent" 
                                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ListView.ItemTemplate>
@@ -398,12 +393,22 @@
 
                                 <!-- Send / Cancel Button -->
                                 <Grid Grid.Column="2" Margin="0,0,10,0">
-                                    <Button Content="Send" Style="{StaticResource PrimaryButton}" Height="38" 
+                                    <Button Style="{StaticResource PrimaryButton}" Height="38" 
                                             Command="{Binding SendCommand}" 
-                                            Visibility="{Binding IsRunning, Converter={StaticResource InverseBoolToVis}}"/>
-                                    <Button Content="Cancel" Style="{StaticResource DangerButton}" Height="38" 
+                                            Visibility="{Binding IsRunning, Converter={StaticResource InverseBoolToVis}}">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Path Data="{StaticResource IconSend}" Fill="#FFFFFF" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
+                                            <TextBlock Text="Send" Foreground="#FFFFFF" FontWeight="Bold" FontSize="13"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Style="{StaticResource DangerButton}" Height="38" 
                                             Command="{Binding CancelCommand}" 
-                                            Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}"/>
+                                            Visibility="{Binding IsRunning, Converter={StaticResource BoolToVis}}">
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <Path Data="{StaticResource IconCancel}" Fill="#FFFFFF" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
+                                            <TextBlock Text="Cancel" Foreground="#FFFFFF" FontWeight="Bold" FontSize="13"/>
+                                        </StackPanel>
+                                    </Button>
                                 </Grid>
 
                                 <!-- Save Button -->

@@ -110,4 +110,49 @@ public class PresentationTests
         Assert.Equal(0, vm.StatusCode);
         Assert.Empty(vm.Body);
     }
+
+    [Fact]
+    public async Task RequestTabViewModel_ExecuteRequest_FiresHistoryItemAddedEvent()
+    {
+        _mockExecutor.Setup(e => e.ExecuteAsync(It.IsAny<ApiRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ApiResponse
+            {
+                StatusCode = 200,
+                StatusDescription = "OK",
+                ElapsedMilliseconds = 45,
+                Body = "{\"success\":true}"
+            });
+
+        var tab = CreateTestTab();
+        tab.Url = "https://example.com/api";
+
+        RequestHistoryItem? loggedItem = null;
+        tab.HistoryItemAdded += item => loggedItem = item;
+
+        await tab.ExecuteRequestAsync();
+
+        Assert.NotNull(loggedItem);
+        Assert.Equal("https://example.com/api", loggedItem.Url);
+        Assert.Equal(200, loggedItem.StatusCode);
+    }
+
+    [Fact]
+    public void SettingsViewModel_ChangingTheme_AppliesThemeCallback()
+    {
+        var mockPrefs = new Mock<IUserPreferencesRepository>();
+        mockPrefs.Setup(p => p.GetAsync()).ReturnsAsync(new UserPreferences { Theme = "Light" });
+
+        bool themeChangedToDark = false;
+        var vm = new SettingsViewModel(
+            mockPrefs.Object,
+            _mockHistory.Object,
+            applyTheme: isDark => themeChangedToDark = isDark,
+            onHistoryCleared: () => { },
+            currentHistoryCount: 5,
+            isCurrentDark: false);
+
+        vm.SelectedTheme = "Dark";
+
+        Assert.True(themeChangedToDark);
+    }
 }

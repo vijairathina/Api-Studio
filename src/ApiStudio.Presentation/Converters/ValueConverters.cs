@@ -12,7 +12,16 @@ public class BoolToVisibilityConverter : IValueConverter
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        bool boolVal = value is bool b && b;
+        bool boolVal = false;
+        if (value is bool b)
+        {
+            boolVal = b;
+        }
+        else if (value is int intVal && parameter != null && int.TryParse(parameter.ToString(), out var targetInt))
+        {
+            boolVal = intVal == targetInt;
+        }
+
         if (Invert) boolVal = !boolVal;
         return boolVal ? Visibility.Visible : Visibility.Collapsed;
     }
@@ -21,6 +30,59 @@ public class BoolToVisibilityConverter : IValueConverter
     {
         bool isVisible = value is Visibility v && v == Visibility.Visible;
         return Invert ? !isVisible : isVisible;
+    }
+}
+
+public class IntToVisibilityConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is int intVal && parameter != null && int.TryParse(parameter.ToString(), out var targetInt))
+        {
+            return intVal == targetInt ? Visibility.Visible : Visibility.Collapsed;
+        }
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
+}
+
+public class IntToBooleanConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is int intVal && parameter != null && int.TryParse(parameter.ToString(), out var targetInt))
+        {
+            return intVal == targetInt;
+        }
+        return false;
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is bool isChecked && isChecked && parameter != null && int.TryParse(parameter.ToString(), out var targetInt))
+        {
+            return targetInt;
+        }
+        return Binding.DoNothing;
+    }
+}
+
+public class StringEqualsConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value == null || parameter == null) return false;
+        return string.Equals(value.ToString(), parameter.ToString(), StringComparison.OrdinalIgnoreCase);
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is bool isChecked && isChecked && parameter != null)
+        {
+            return parameter.ToString() ?? "";
+        }
+        return Binding.DoNothing;
     }
 }
 

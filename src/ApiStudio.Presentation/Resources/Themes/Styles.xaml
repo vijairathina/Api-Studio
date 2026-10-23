@@ -224,6 +224,42 @@
         </Setter>
     </Style>
 
+    <!-- Segmented Glass Radio Button for Tabs -->
+    <Style x:Key="SegmentedGlassRadio" TargetType="RadioButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="8"
+                            Padding="12,6"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource GlassCardBrush}"/>
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource GlassBorderGradient}"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="1"/>
+                            <Setter TargetName="border" Property="Effect" Value="{StaticResource GlassSubtleShadow}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Glass TabControl Styles -->
     <Style x:Key="ModernTabItem" TargetType="TabItem">
         <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}" />
