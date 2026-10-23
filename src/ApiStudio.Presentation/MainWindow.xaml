@@ -503,21 +503,6 @@
                                                             </ControlTemplate>
                                                         </Button.Template>
                                                     </Button>
-
-                                                    <!-- Active Tab Glowing Accent Indicator (Bottom Bar) -->
-                                                    <Border Grid.ColumnSpan="4" VerticalAlignment="Bottom" Height="2.5" CornerRadius="1.5"
-                                                            Background="{DynamicResource TabActiveIndicatorBrush}" Margin="4,0,4,-1">
-                                                        <Border.Style>
-                                                            <Style TargetType="Border">
-                                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Border.Style>
-                                                    </Border>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
