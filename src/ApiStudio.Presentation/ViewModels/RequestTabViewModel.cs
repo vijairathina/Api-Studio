@@ -19,7 +19,8 @@ public class RequestTabViewModel : ObservableObject
     private readonly IHistoryRepository _historyRepository;
     private readonly Func<IDictionary<string, string>> _getActiveVariables;
 
-    private Guid _id;
+    private Guid _id = Guid.NewGuid();
+    private bool _isSelected;
     private string _name = "New Request";
     private HttpMethodType _method = HttpMethodType.GET;
     private string _customMethod = string.Empty;
@@ -46,6 +47,12 @@ public class RequestTabViewModel : ObservableObject
     private ApiKeyLocation _apiKeyLocation = ApiKeyLocation.Header;
 
     public Guid Id => _id;
+
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set => SetProperty(ref _isSelected, value);
+    }
 
     public string Name
     {
@@ -311,7 +318,7 @@ public class RequestTabViewModel : ObservableObject
 
     public void LoadFromModel(ApiRequest request)
     {
-        _id = request.Id;
+        _id = request.Id != Guid.Empty ? request.Id : Guid.NewGuid();
         _name = request.Name;
         _method = request.Method;
         _customMethod = request.CustomMethod;

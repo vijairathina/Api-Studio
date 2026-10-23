@@ -39,4 +39,12 @@ public partial class MainWindow : Window
         };
         win.ShowDialog();
     }
+
+    private void OnTabItemClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is FrameworkElement fe && fe.DataContext is RequestTabViewModel tab)
+        {
+            _viewModel.SelectTab(tab);
+        }
+    }
 }

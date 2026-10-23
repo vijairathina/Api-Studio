@@ -40,7 +40,20 @@ public class MainViewModel : ObservableObject
     public RequestTabViewModel? SelectedTab
     {
         get => _selectedTab;
-        set => SetProperty(ref _selectedTab, value);
+        set
+        {
+            if (_selectedTab != null)
+            {
+                _selectedTab.IsSelected = false;
+            }
+            if (SetProperty(ref _selectedTab, value))
+            {
+                if (_selectedTab != null)
+                {
+                    _selectedTab.IsSelected = true;
+                }
+            }
+        }
     }
 
     public EnvironmentViewModel? SelectedEnvironment
@@ -103,6 +116,7 @@ public class MainViewModel : ObservableObject
 
     // Commands
     public ICommand NewTabCommand { get; }
+    public ICommand SelectTabCommand { get; }
     public ICommand CloseTabCommand { get; }
     public ICommand SaveActiveTabCommand { get; }
     public ICommand AddCollectionCommand { get; }
@@ -139,6 +153,7 @@ public class MainViewModel : ObservableObject
         _collectionRunner = collectionRunner;
 
         NewTabCommand = new RelayCommand(AddNewTab);
+        SelectTabCommand = new RelayCommand<RequestTabViewModel>(SelectTab);
         CloseTabCommand = new RelayCommand<RequestTabViewModel>(CloseTab);
         SaveActiveTabCommand = new RelayCommand(SaveActiveTab);
         AddCollectionCommand = new RelayCommand(AddCollection);
@@ -224,12 +239,21 @@ public class MainViewModel : ObservableObject
         });
     }
 
+    public void SelectTab(RequestTabViewModel? tab)
+    {
+        if (tab != null && Tabs.Contains(tab))
+        {
+            SelectedTab = tab;
+        }
+    }
+
     public void AddNewTab()
     {
         var tab = CreateNewTabViewModel();
         tab.Name = $"Request {Tabs.Count + 1}";
         tab.Url = "https://jsonplaceholder.typicode.com/posts/1";
         tab.Method = HttpMethodType.GET;
+        tab.IsDirty = false;
         Tabs.Add(tab);
         SelectedTab = tab;
     }
@@ -237,10 +261,22 @@ public class MainViewModel : ObservableObject
     public void OpenRequestInTab(ApiRequest request)
     {
         // Check if already open
-        var existing = Tabs.FirstOrDefault(t => t.Id == request.Id);
+        var existing = Tabs.FirstOrDefault(t => 
+            (request.Id != Guid.Empty && t.Id == request.Id) ||
+            (t.Url == request.Url && t.Method == request.Method && t.Name == request.Name));
+
         if (existing != null)
         {
             SelectedTab = existing;
+            return;
+        }
+
+        // If active tab is untouched/default, reuse it
+        if (SelectedTab != null && !SelectedTab.IsDirty && !SelectedTab.Response.HasResponse &&
+            SelectedTab.Name.StartsWith("Request ") &&
+            (SelectedTab.Url == "https://jsonplaceholder.typicode.com/posts/1" || string.IsNullOrWhiteSpace(SelectedTab.Url)))
+        {
+            SelectedTab.LoadFromModel(request);
             return;
         }
 

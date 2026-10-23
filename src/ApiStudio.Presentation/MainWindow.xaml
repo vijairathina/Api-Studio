@@ -319,17 +319,33 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Background="{StaticResource GlassCardBrush}" 
-                                                BorderBrush="{StaticResource GlassBorderGradient}" 
-                                                BorderThickness="1" 
-                                                CornerRadius="10" 
-                                                Padding="12,6" 
-                                                Margin="0,0,6,0" 
-                                                Cursor="Hand"
-                                                Effect="{StaticResource GlassSubtleShadow}">
+                                        <Border Margin="0,0,6,0" Cursor="Hand" MouseLeftButtonUp="OnTabItemClick">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="{StaticResource GlassSubtleBrush}" />
+                                                    <Setter Property="BorderBrush" Value="{StaticResource GlassBorderGradient}" />
+                                                    <Setter Property="BorderThickness" Value="1" />
+                                                    <Setter Property="CornerRadius" Value="10" />
+                                                    <Setter Property="Padding" Value="12,6" />
+                                                    <Setter Property="Opacity" Value="0.85" />
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Opacity" Value="1.0" />
+                                                            <Setter Property="Background" Value="{StaticResource HoverBackgroundBrush}" />
+                                                        </Trigger>
+                                                        <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                            <Setter Property="Background" Value="{StaticResource GlassCardBrush}" />
+                                                            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}" />
+                                                            <Setter Property="BorderThickness" Value="1.5" />
+                                                            <Setter Property="Opacity" Value="1.0" />
+                                                            <Setter Property="Effect" Value="{StaticResource ButtonGlowBlue}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
                                             <Border.InputBindings>
                                                 <MouseBinding Gesture="LeftClick" 
-                                                              Command="{Binding DataContext.NewTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                                              Command="{Binding DataContext.SelectTabCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
                                                               CommandParameter="{Binding}"/>
                                             </Border.InputBindings>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">

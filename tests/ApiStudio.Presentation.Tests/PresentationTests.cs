@@ -155,4 +155,70 @@ public class PresentationTests
 
         Assert.True(themeChangedToDark);
     }
+
+    private MainViewModel CreateMainViewModel()
+    {
+        return new MainViewModel(
+            _mockExecutor.Object,
+            _variableResolver,
+            _assertionEvaluator,
+            new Mock<ICollectionRepository>().Object,
+            new Mock<IEnvironmentRepository>().Object,
+            _mockHistory.Object,
+            new Mock<IUserPreferencesRepository>().Object,
+            new Mock<ICurlConverter>().Object,
+            new Mock<IImportExportService>().Object,
+            new Mock<ICollectionRunner>().Object);
+    }
+
+    [Fact]
+    public void MainViewModel_SelectTabCommand_SwitchesSelectedTabAndUpdatesIsSelected()
+    {
+        var vm = CreateMainViewModel();
+        vm.AddNewTab();
+        var tab1 = vm.SelectedTab!;
+        vm.AddNewTab();
+        var tab2 = vm.SelectedTab!;
+
+        Assert.Equal(tab2, vm.SelectedTab);
+        Assert.True(tab2.IsSelected);
+        Assert.False(tab1.IsSelected);
+
+        vm.SelectTabCommand.Execute(tab1);
+
+        Assert.Equal(tab1, vm.SelectedTab);
+        Assert.True(tab1.IsSelected);
+        Assert.False(tab2.IsSelected);
+    }
+
+    [Fact]
+    public void MainViewModel_OpenRequestInTab_ReusesMatchingTabInsteadOfDuplicating()
+    {
+        var vm = CreateMainViewModel();
+        var req = new ApiRequest
+        {
+            Id = Guid.NewGuid(),
+            Name = "Get Users",
+            Url = "https://jsonplaceholder.typicode.com/users",
+            Method = HttpMethodType.GET
+        };
+
+        vm.OpenRequestInTab(req);
+        Assert.Single(vm.Tabs);
+
+        // Opening the same request again should not create another tab
+        vm.OpenRequestInTab(req);
+        Assert.Single(vm.Tabs);
+        Assert.Equal("Get Users", vm.SelectedTab?.Name);
+    }
+
+    [Fact]
+    public void MainViewModel_AddNewTab_InitializesCleanWithoutDirtyFlag()
+    {
+        var vm = CreateMainViewModel();
+        vm.AddNewTab();
+
+        Assert.NotNull(vm.SelectedTab);
+        Assert.False(vm.SelectedTab.IsDirty);
+    }
 }
